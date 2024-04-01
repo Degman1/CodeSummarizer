@@ -173,14 +173,14 @@ app.get('/submit_request', async (req, res) => {
       username: req.query.username,
       programming_language: req.query.programming_language,
     })
-    .select("request_id");
+    .select();
 
   if (error) {
     res.send(error);
     return;
   }
 
-  const request_id = () => data[0].request_id;
+  const request_data = () => data[0];
 
   if (data.length > 0 && data[0].request_id != undefined) {
     // Get the list of responses and their respective catagories
@@ -188,7 +188,7 @@ app.get('/submit_request', async (req, res) => {
 
     // Add the request id to each response object
     responses.forEach(response => {
-      response["request_id"] = request_id();
+      response["request_id"] = request_data().request_id;
     });
 
     // Log the responses
@@ -203,7 +203,12 @@ app.get('/submit_request', async (req, res) => {
     }
 
     // Return the response information
-    res.send(data);
+    res.send({
+      request: request_data(),
+      responses: data
+    });
+  } else {
+    res.send("Failed to log request");
   }
 });
 
