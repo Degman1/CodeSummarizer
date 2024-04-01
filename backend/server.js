@@ -1,5 +1,10 @@
+/**
+ * Backend Server to serve the REST API endpoints for the CodeSummarizer web application
+ */
+
 import supabaseClient from '@supabase/supabase-js';
-import express from "express";
+import express, { request } from "express";
+import * as Summarizer from './summarizer.js';
 
 const app = express();
 
@@ -98,7 +103,7 @@ app.get('/user_information', async (req, res) => {
 app.get('/all_user_information', async (req, res) => {
   const {data, error} = await supabase
     .from('Users')
-    .select('username, creation_date, admin')
+    .select('username, creation_date, admin');
   if (error) {
     res.send(error);
   } else {
@@ -119,7 +124,15 @@ app.get('/all_user_information', async (req, res) => {
  * }]
  */
 app.get('/get_user_requests', async (req, res) => {
-
+  const {data, error} = await supabase
+    .from('Requests')
+    .select('request_id, creation_date, prompt, username, programming_language')
+    .eq("username", req.query.username);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
 });
 
 /**
@@ -136,7 +149,15 @@ app.get('/get_user_requests', async (req, res) => {
  * }]
  */
 app.get('/get_responses', async (req, res) => {
-
+  const {data, error} = await supabase
+    .from('Responses')
+    .select('response_id, request_id, text, catagory, rating, creation_date')
+    .eq("request_id", req.query.request_id);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
 });
 
 /**
@@ -153,7 +174,46 @@ app.get('/get_responses', async (req, res) => {
  * }]
  */
 app.get('/submit_request', async (req, res) => {
+  // Log the request
+  const {data, error} = await supabase
+    .from('Requests')
+    .insert({
+      prompt: req.query.prompt,
+      username: req.query.username,
+      programming_language: req.query.programming_language,
+    })
+    .select("request_id");
 
+  if (error) {
+    res.send(error);
+    return;
+  }
+
+  const request_id = () => data[0].request_id;
+
+  if (data.length > 0 && data[0].request_id != undefined) {
+    // Get the list of responses and their respective catagories
+    let responses = Summarizer.getSummaries(req.query.prompt, req.query.programming_language);
+
+    // Add the request id to each response object
+    responses.forEach(response => {
+      response["request_id"] = request_id();
+    });
+
+    // Log the responses
+    const {data, error} = await supabase
+      .from('Responses')
+      .insert(responses)
+      .select();
+
+    if (error) {
+      res.send(error);
+      return;
+    }
+
+    // Return the response information
+    res.send(data);
+  }
 });
 
 /**
@@ -165,12 +225,23 @@ app.get('/submit_request', async (req, res) => {
  */
 app.post('/rate_response', async (req, res) => {
 
+  // TODO send the ratings to ChatGPT?
+
+  const {error} = await supabase
+    .from('Responses')
+    .update({'rating': req.query.rating})
+    .eq("response_id", req.query.response_id);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send("Rating Succeded");
+  }
 });
 
 /**
  * Get the summary, catagory, and rating statistics for a given user
  * Query Parameters:
- * 2. username: String
+ * 1. username: String
  * Returns: JSON TBD
  */
 app.get('/user_statistics', async (req, res) => {
@@ -179,6 +250,8 @@ app.get('/user_statistics', async (req, res) => {
 
 /**
  * Get the summary, catagory, and rating statistics for all users combined
+ * Query Parameters: None
+ * Returns: JSON TBD
  */
 app.get('/combined_statistics', async (req, res) => {
 
