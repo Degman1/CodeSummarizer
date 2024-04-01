@@ -239,9 +239,8 @@ app.get('/user_statistics', async (req, res) => {
 
 /**
  * Get the summary, catagory, and rating statistics for all users combined
- * Query Parameters: None
- * Returns: JSON TBD
+ * @return JSON TBD
  */
 app.get('/combined_statistics', async (req, res) => {
 
-})
+});
