@@ -16,10 +16,7 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 /**
  * Tests the status of the backend server
- * Parameters: None
- * Returns: JSON {
- *   status: String
- * }
+ * @return JSON { status: String }
  */
 app.get("/status", (request, response) => {
   response.send({
@@ -29,11 +26,10 @@ app.get("/status", (request, response) => {
 
 /**
  * Add a new user
- * Query Parameters: 
- * 1. username: String
- * 2. password: String
- * 3. admin: 'TRUE' || 'FALSE'
- * Returns: Success or error message
+ * @param username: String
+ * @param password: String
+ * @param admin: 'TRUE' || 'FALSE'
+ * @return Success or error message
  */
 app.post('/add_user', async (req, res) => {
   const {error} = await supabase
@@ -52,9 +48,8 @@ app.post('/add_user', async (req, res) => {
 
 /**
  * Removes a user
- * Query Parameters:
- * 1. username: String
- * Returns: Success or error message
+ * @param username: String
+ * @return Success or error message
  */
 app.delete('/remove_user', async (req, res) => {
   const {error} = await supabase
@@ -71,8 +66,8 @@ app.delete('/remove_user', async (req, res) => {
 /**
  * Get account information on a given user
  * Query Parameters:
- * 1. username: String
- * Returns: JSON {
+ * @param username: String
+ * @return JSON {
  *   username: String,
  *   creation_date: Date String,
  *   admin: Boolean
@@ -93,8 +88,7 @@ app.get('/user_information', async (req, res) => {
 /**
  * Get account information for all users
  * TODO Security measures?
- * Query Parameters: None
- * Returns: JSON [{
+ * @return JSON [{
  *   username: String,
  *   creation_date: Date String,
  *   admin: Boolean
@@ -113,9 +107,8 @@ app.get('/all_user_information', async (req, res) => {
 
 /**
  * Get all the summary requests for a given user
- * Query Parameters:
- * 1. username: String
- * Returns: JSON [{ 
+ * @param username: String
+ * @return JSON [{ 
  *   request_id: Int,
  *   creation_date: Date String,
  *   prompt: String,
@@ -137,9 +130,8 @@ app.get('/get_user_requests', async (req, res) => {
 
 /**
  * Get all the responses for a user's given request
- * Query Parameters:
- * 1. request_id: Int
- * Returns: JSON [{
+ * @param request_id: Int
+ * @return JSON [{
  *   response_id: Int,
  *   request_id: Int,
  *   text: String,
@@ -162,11 +154,10 @@ app.get('/get_responses', async (req, res) => {
 
 /**
  * Submit a request for a new summary
- * Query Parameters:
- * 1. username: String
- * 2. prompt: String
- * 3. programming_language: String
- * Returns: JSON [{
+ * @param username: String
+ * @param prompt: String
+ * @param programming_language: String
+ * @return JSON [{
  *   request_id: Int,
  *   response_id: Int,
  *   text: String,
@@ -218,10 +209,9 @@ app.get('/submit_request', async (req, res) => {
 
 /**
  * Submit a rating for a summary response
- * Query Parameters:
- * 1. response_id: Int,
- * 2. rating: Int
- * Returns: Success or error message
+ * @param response_id: Int,
+ * @param rating: Int
+ * @return Success or error message
  */
 app.post('/rate_response', async (req, res) => {
 
@@ -240,9 +230,8 @@ app.post('/rate_response', async (req, res) => {
 
 /**
  * Get the summary, catagory, and rating statistics for a given user
- * Query Parameters:
- * 1. username: String
- * Returns: JSON TBD
+ * @param username: String
+ * @return JSON TBD
  */
 app.get('/user_statistics', async (req, res) => {
 
