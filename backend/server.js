@@ -8,7 +8,10 @@ import * as Summarizer from './summarizer.js';
 
 const app = express();
 
-const supabase = supabaseClient.createClient("https://klymzdwfxffmowgxmeij.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtseW16ZHdmeGZmbW93Z3htZWlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTE4NTU2MTYsImV4cCI6MjAyNzQzMTYxNn0.BrofIOnCRFFfrINR3nqNq15I62_meXXAODilxlXSsA0");
+const supabase = supabaseClient.createClient(
+  "https://klymzdwfxffmowgxmeij.supabase.co", 
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtseW16ZHdmeGZmbW93Z3htZWlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTE4NTU2MTYsImV4cCI6MjAyNzQzMTYxNn0.BrofIOnCRFFfrINR3nqNq15I62_meXXAODilxlXSsA0"
+);
 
 const PORT = process.env.PORT || 4000;
 
@@ -64,8 +67,29 @@ app.delete('/remove_user', async (req, res) => {
 });
 
 /**
+ * Authenticate a user to log them into the site
+ * @param username String
+ * @param password String
+ * @returns JSON { username: String, success: Boolean, message: String }
+ */
+app.get('/authenticate_user', async (req, res) => {
+  const {data, error} = await supabase
+    .from('Users')
+    .select('username, password')
+    .eq('username', req.query.username);
+  if (error) {
+    res.send(error);
+  } else if (data == undefined || data.length == 0) {
+    res.send({username: "", success: false, message: `Username ${req.query.username} does not exist.`});
+  } else if (req.query.password == data[0].password) {
+    res.send({username: data[0].username, success: true, message: "User authentication successfull."});
+  } else {
+    res.send({username: data[0].username, success: false, message: "Incorrect password, please try again."});
+  }
+});
+
+/**
  * Get account information on a given user
- * Query Parameters:
  * @param username: String
  * @return JSON {
  *   username: String,
