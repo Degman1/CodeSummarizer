@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import './App.css';
-import SummaryScreen from './screens/SummaryScreen';
-import StatScreen from './screens/StatsScreen';
-import AccountScreen from './screens/AccountScreen';
+import SummaryScreen from './components/SummaryScreen';
+import StatScreen from './components/StatsScreen';
+import AccountDropdown from './components/AccountDropdown';
 
 function App() {
 
   // state that holds current subpage, selected in nav bar ('summaries', 'stats', 'settings') etc
   const [subPage, setSubpage] = useState('')
+  const [openAccountTab, setOpenAccountTab] = useState(false)
 
 
   const buildNavButton = (page) => {
@@ -16,6 +17,7 @@ function App() {
         onClick={() => setSubpage(page)}
       >{page}</button>
     )
+
   }
 
   const buildSubPage = () => {
@@ -24,8 +26,6 @@ function App() {
         return <SummaryScreen />
       case 'Stats':
         return <StatScreen />
-      case 'Account':
-        return <AccountScreen />
       default:
         return <div>Invalid page</div>
     }
@@ -35,9 +35,18 @@ function App() {
     <div className="page">
       <div className='app'>
         <div className='nav-bar'>
-          {buildNavButton('Summaries')}
-          {buildNavButton('Stats')}
-          {buildNavButton('Account')}
+          <div className='nav-section left-aligned-nav'>
+            {buildNavButton('Summaries')}
+            {buildNavButton('Stats')}
+          </div>
+          <div className='nav-section right-aligned-nav'>
+            <button
+              className='account-button'
+              onClick={() => setOpenAccountTab(old => !old)}>
+              GEAR
+              {openAccountTab && <AccountDropdown />}
+            </button>
+          </div>
         </div>
         <div className='page-content'>
           {buildSubPage()}

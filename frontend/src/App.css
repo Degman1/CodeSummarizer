@@ -19,13 +19,31 @@
 
 .nav-bar {
   height: 10%;
+  width: 100%;
   border-bottom: 1px solid black;
+  padding: 0 1vw;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-section {
+  display: flex;
+  flex-direction: row;
   align-items: center;
   column-gap: 1vw;
-  padding: 0 1vw;
+  width: 40%;
+}
+
+.left-aligned-nav {
+  justify-content: flex-start;
+  padding: 0 2vw;
+}
+
+.right-aligned-nav {
+  justify-content: flex-end;
+  padding: 0 2vw;
 }
 
 .nav-bar>button {
@@ -33,6 +51,11 @@
   background-color: transparent;
   font-size: 1.5vw;
   cursor: pointer;
+}
+
+.account-button {
+  justify-self: flex-end;
+  position: relative;
 }
 
 .page-content {
