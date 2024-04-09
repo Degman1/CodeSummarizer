@@ -5,7 +5,7 @@ import StatScreen from './screens/StatsScreen';
 import AccountScreen from './screens/AccountScreen';
 
 function App() {
-  
+
   // state that holds current subpage, selected in nav bar ('summaries', 'stats', 'settings') etc
   const [subPage, setSubpage] = useState('')
 
