@@ -32,7 +32,7 @@ function App() {
   }
 
   return (
-    <div className="page">
+    <div className='page'>
       <div className='app'>
         <div className='nav-bar'>
           <div className='nav-section left-aligned-nav'>
