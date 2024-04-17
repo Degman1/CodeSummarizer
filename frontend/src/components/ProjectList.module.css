@@ -69,6 +69,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    overflow: hidden;
     height: 100%;
     width: 100%;
     padding: 1.6vw;
@@ -77,13 +78,16 @@
 
 .codeSnippet {
     height: 70%;
+    max-height: 70%;
     width: 100%;
     border: 1px solid black;
     border-radius: 0.75vw;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 1vw;
     overflow-y: auto;
+    font-size: 0.9vw;
 }
 
 .projectDetails {
@@ -94,4 +98,31 @@
     align-items: center;
     border: 1px solid black;
     border-radius: 0.75vw;
+    display: grid;
+    grid-template-rows: 1fr 3fr 1fr;
+    grid-template-columns: 1fr;
+    padding: 1vw;
+}
+
+.topRow {
+    grid-row: 1 / 2;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid black;
+}
+
+.middleRow {
+    grid-row: 2 / 3;
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+}
+.bottomRow {
+    grid-row: 3 / 4;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
 }
