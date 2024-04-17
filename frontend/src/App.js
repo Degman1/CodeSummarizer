@@ -14,7 +14,10 @@ function App() {
   const buildNavButton = (page) => {
     return (
       <button
-        onClick={() => setSubpage(page)}
+        onClick={() => {
+          setSubpage(page)
+          setOpenAccountTab(false)
+        }}
       >{page}</button>
     )
 
@@ -42,8 +45,11 @@ function App() {
           <div className='nav-section right-aligned-nav'>
             <button
               className='account-button'
-              onClick={() => setOpenAccountTab(old => !old)}>
-              GEAR
+            >
+              <img
+                onClick={() => setOpenAccountTab(old => !old)}
+                src={`${process.env.PUBLIC_URL}/assets/settingsIcon.png`}
+              />
               {openAccountTab && <AccountDropdown />}
             </button>
           </div>

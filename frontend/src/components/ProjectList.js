@@ -7,6 +7,7 @@ function ProjectList() {
     // description is a user submitted description of the project for identification, not one of the code summaries that chat gpt produces
     const [projects, setProjects] = useState([{
         name: "Homework 1",
+        projectId: 1,
         author: "Jake",
         timestamp: 1711289604028,
         codeSnippet: `const hello = (name) => {
@@ -15,6 +16,7 @@ function ProjectList() {
         description: "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     }, {
         name: "Homework 2",
+        projectId: 2,
         author: "Jake",
         timestamp: 1712299504028,
         codeSnippet: `const hello = (name) => {
@@ -23,6 +25,7 @@ function ProjectList() {
         description: "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     }, {
         name: "Cool Evaluation",
+        projectId: 3,
         author: "Sivan",
         timestamp: 1613299604028,
         codeSnippet: `
@@ -80,6 +83,7 @@ function ProjectList() {
         description: "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     }, {
         name: "Technical Interview",
+        projectId: 4,
         author: "David",
         timestamp: 1313299604028,
         codeSnippet: `const hello = (name) => {
@@ -88,6 +92,7 @@ function ProjectList() {
         description: "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     }, {
         name: "January Code Review",
+        projectId: 5,
         author: "Harry",
         timestamp: 1313299604028,
         codeSnippet: `const hello = (name) => {
@@ -104,14 +109,17 @@ function ProjectList() {
              enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`
     }, {
         name: "Code Report",
+        projectId: 6,
         author: "Misha",
         timestamp: 1222299604028,
         codeSnippet: `const hello = (name) => {
             return "Hey, " + name
         }`,
         description: "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-    }])
+    }
+    ])
 
+    // should this be a copy of the object or just the key, then we .find() in code? figure out later
     const [selectedProject, setSelectedProject] = useState('')
 
     // build functions
@@ -123,6 +131,7 @@ function ProjectList() {
             <div
                 className={st.projectRow}
                 onClick={() => setSelectedProject((old) => old === project ? null : project)}
+                key={project.projectId}
             >
                 <div className={st.projectName}>{project.name}</div>
                 <div className={st.projectAuthor}>{project.author}</div>
@@ -140,7 +149,7 @@ function ProjectList() {
     const buildProjectDetails = (project) => {
         return (<div className={st.projectDetails}>
             <div className={st.topRow}>
-                <span>{project.name}</span>
+                <span>{project.name} <i className={st.projectId}>#{project.projectId}</i></span>
                 <p>
                     {project.author} <small>{buildDate(project.timestamp)}</small>
                 </p>
@@ -159,6 +168,9 @@ function ProjectList() {
             <div className={st.summaryColumns}>
                 <div className={st.projectList}>
                     {projects.map((p) => buildProjectRow(p))}
+                    <div className={st.createNewProject}>
+                        <button>Create new project</button>
+                    </div>
                 </div>
                 <div className={st.projectContent}>
                     {selectedProject && buildCodeSnippet(selectedProject.codeSnippet)}

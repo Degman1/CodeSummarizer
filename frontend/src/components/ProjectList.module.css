@@ -17,6 +17,7 @@
 /* Project (left) column styles */
 .projectList {
     display: flex;
+    height: 100%;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
@@ -33,9 +34,15 @@
     cursor: pointer;
     border-bottom: 1px solid black;
     width: 100%;
+    min-height: 10vh;
     height: 10vh;
     padding: 1vw 0 0 1vw;
     transition: font-size 0.2s;
+}
+
+.createNewProject {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
 }
 
 .projectName {
@@ -43,6 +50,11 @@
     grid-row: 1 / 2;
     width: 100%;
     height: 100%;
+}
+
+.projectId {
+    font-size: 0.7vw;
+    color: gray;
 }
 
 .projectAuthor {
@@ -61,6 +73,7 @@
 
 .projectRow:hover {
     font-size: 1vw;
+    background-color: rgb(246, 246, 246);
 }
 
 /* Content (right) column styles */
@@ -116,13 +129,14 @@
 .middleRow {
     grid-row: 2 / 3;
     overflow-y: auto;
-    height: 100%;
     width: 100%;
+    height: 100%;
 }
 .bottomRow {
     grid-row: 3 / 4;
+    height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    align-items: center;
+    align-items: flex-end;
 }
