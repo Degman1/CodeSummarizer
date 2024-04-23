@@ -1,5 +1,7 @@
 import st from './ProjectList.module.css'
 import react, { useState } from 'react'
+import NewProjectScreen from './NewProjectScreen'
+import SummariesScreen from './SummariesScreen'
 
 function ProjectList() {
 
@@ -118,9 +120,11 @@ function ProjectList() {
         description: "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     }
     ])
+    const [newProjectScreen, setNewProjectScreen] = useState(false)
 
     // should this be a copy of the object or just the key, then we .find() in code? figure out later
     const [selectedProject, setSelectedProject] = useState('')
+    const [viewingSummaries, setViewingSummaries] = useState(false)
 
     // build functions
 
@@ -158,18 +162,29 @@ function ProjectList() {
                 <p>{project.description}</p>
             </div>
             <div className={st.bottomRow}>
-                <button>View Summaries</button>
+                <button onClick={() => setViewingSummaries(true)}>View Summaries</button>
             </div>
         </div>)
     }
 
+    if (viewingSummaries) {
+        return (<div className={st.content}>
+            <SummariesScreen
+                backFunc={() => setViewingSummaries(false)}
+                selectedProject={selectedProject}
+            />
+        </div>)
+    }
+
+
     return (
         <div className={st.content}>
+            {newProjectScreen && <NewProjectScreen closeNewProjectScreen={() => setNewProjectScreen(false)} />}
             <div className={st.summaryColumns}>
                 <div className={st.projectList}>
                     {projects.map((p) => buildProjectRow(p))}
                     <div className={st.createNewProject}>
-                        <button>Create new project</button>
+                        <button onClick={() => setNewProjectScreen(true)}>Create new project</button>
                     </div>
                 </div>
                 <div className={st.projectContent}>
