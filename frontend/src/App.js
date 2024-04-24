@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import ProjectList from './components/ProjectList';
+import ProjectList from './components/ProjectPageComponents/ProjectList';
 import StatScreen from './components/StatsScreen';
 import AccountDropdown from './components/AccountDropdown';
 
