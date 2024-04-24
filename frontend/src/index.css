@@ -11,6 +11,10 @@ body {
 
 * {
   box-sizing: border-box;
+  --maroon_light: #961b2f;
+  --maroon_dark: #572933;
+  --white1: white;
+  --white2: whitesmoke;
 }
 
 code {
