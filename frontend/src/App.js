@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
 import ProjectList from './components/ProjectPageComponents/ProjectList';
-import StatScreen from './components/StatsScreen';
-import AccountDropdown from './components/AccountDropdown';
+import StatScreen from './components/StatsPageComponents/StatsScreen';
+import AccountDropdown from './components/AccountDropdownComponents/AccountDropdown';
 
 function App() {
 
