@@ -5,7 +5,7 @@ function SummariesScreen({ backFunc, selectedProject }) {
     const [viewing, setViewing] = useState('code')
     const [summaries, setSummaries] = useState({
         summary1: 'long chatgpt generated summary1', summary2: 'long chatgpt generated summary2',
-        summary3: 'long chatgpt generated summary3', summary4: 'long chatgpt generated summary4'
+        summary3: 'long chatgpt generated summary3', summary4: 'long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 '
     })
 
     const buildCodeSnippetArea = (code) => {

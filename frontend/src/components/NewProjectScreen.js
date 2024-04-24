@@ -56,10 +56,10 @@ function NewProjectScreen({ closeNewProjectScreen }) {
             onClick={(e) => handleClose(e)}
         >
             <div className={st.container}>
-                <span
+                <button
                     className={st.closeX}
                     onClick={() => handleClose()}
-                >X</span>
+                >X</button>
                 <form
                     className={st.form}
                     onSubmit={handleSubmit}
