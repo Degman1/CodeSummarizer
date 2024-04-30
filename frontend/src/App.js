@@ -1,68 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { AuthProvider } from "./contexts/AuthContext";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
-import ProjectList from './components/ProjectPageComponents/ProjectList';
-import StatScreen from './components/StatsPageComponents/StatsScreen';
-import AccountDropdown from './components/AccountDropdownComponents/AccountDropdown';
-import HomePage from './components/HomePageComponents/HomePage';
+import Dashboard from './components/Dashboard';
+import LoginSignUp from './components/LoginSignUp';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
+  // State to keep track of whether the user is logged in
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // state that holds current subpage, selected in nav bar ('summaries', 'stats', 'settings') etc
-  const [subPage, setSubpage] = useState('Home')
-  const [openAccountTab, setOpenAccountTab] = useState(false)
+  // Effect to check the logged in status from local storage
+  useEffect(() => {
+    // Check if user is logged in
+    const loggedInStatus = localStorage.getItem('isLoggedIn') === 'true';
+    setIsLoggedIn(loggedInStatus);
+  }, []);
 
-
-  const buildNavButton = (page) => {
-    return (
-      <button
-        onClick={() => {
-          setSubpage(page)
-          setOpenAccountTab(false)
-        }}
-      >{page}</button>
-    )
-
-  }
-
-  const buildSubPage = () => {
-    switch (subPage) {
-      case 'Home':
-        return <HomePage />
-      case 'Projects':
-        return <ProjectList />
-      case 'Stats':
-        return <StatScreen />
-      default:
-        return <div>Invalid page</div>
-    }
-  }
+  const handleLogin = (status) => {
+    setIsLoggedIn(status);
+    localStorage.setItem('isLoggedIn', status ? 'true' : 'false');
+    console.log('Is logged in:', status);
+  };
 
   return (
-    <div className='page'>
-      <div className='app'>
-        <div className='nav-bar'>
-          <div className='nav-section left-aligned-nav'>
-            {buildNavButton('Home')}
-            {buildNavButton('Projects')}
-            {buildNavButton('Stats')}
-          </div>
-          <div className='nav-section right-aligned-nav'>
-            <button
-              className='account-button'
-            >
-              <img
-                onClick={() => setOpenAccountTab(old => !old)}
-                src={`${process.env.PUBLIC_URL}/assets/settingsIcon.png`}
-              />
-              {openAccountTab && <AccountDropdown />}
-            </button>
-          </div>
-        </div>
-        <div className='page-content'>
-          {buildSubPage()}
-        </div>
-      </div>
-    </div>
+    <Dashboard/>
+    // <AuthProvider>
+    //   <Router>
+    //     <div className='page'>
+    //       <Routes>
+    //         <Route path="/login" element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <LoginSignUp onLogin={handleLogin} />} />
+    //         <Route path="/dashboard" element={isLoggedIn? <Dashboard /> : <Navigate to="/login" replace />} />
+    //         <Route path="*" element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} replace />} />
+    //       </Routes>
+    //     </div>
+    //   </Router>
+    // </AuthProvider>
   );
 }
 
