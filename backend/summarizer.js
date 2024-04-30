@@ -3,11 +3,10 @@
  */
 
 
-const { Anthropic } = require('@anthropic-ai/sdk');
+import { Anthropic } from '@anthropic-ai/sdk';
 
-const anthropic = new Anthropic({
-  apiKey: 'my_api_key', // defaults to process.env["ANTHROPIC_API_KEY"]
-});
+// Don't export this later
+export const anthropic = new Anthropic();
 
 class LLM {
   constructor() {
@@ -38,14 +37,13 @@ class Haiku extends LLM {
   constructor() {
     super();
     this.model = "Haiku";
-    throw new Error("Haiku is not implemented yet");
   }
 
   async prompt(text) {
     // Use Haiku to summarize the text
     try {
       var msg = await anthropic.messages.create({
-        model: "claude-3-opus-20240229",
+        model: "claude-3-haiku-20240307",
         max_tokens: 1024,
         messages: [{ role: "user", content: task + "\n" + text }],
       });
