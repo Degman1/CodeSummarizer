@@ -3,11 +3,12 @@ import './App.css';
 import ProjectList from './components/ProjectPageComponents/ProjectList';
 import StatScreen from './components/StatsPageComponents/StatsScreen';
 import AccountDropdown from './components/AccountDropdownComponents/AccountDropdown';
+import HomePage from './components/HomePageComponents/HomePage';
 
 function App() {
 
   // state that holds current subpage, selected in nav bar ('summaries', 'stats', 'settings') etc
-  const [subPage, setSubpage] = useState('Projects')
+  const [subPage, setSubpage] = useState('Home')
   const [openAccountTab, setOpenAccountTab] = useState(false)
 
 
@@ -25,6 +26,8 @@ function App() {
 
   const buildSubPage = () => {
     switch (subPage) {
+      case 'Home':
+        return <HomePage />
       case 'Projects':
         return <ProjectList />
       case 'Stats':
@@ -39,6 +42,7 @@ function App() {
       <div className='app'>
         <div className='nav-bar'>
           <div className='nav-section left-aligned-nav'>
+            {buildNavButton('Home')}
             {buildNavButton('Projects')}
             {buildNavButton('Stats')}
           </div>
