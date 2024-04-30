@@ -266,10 +266,73 @@ app.post('/rate_response', async (req, res) => {
 /**
  * Get the summary, catagory, and rating statistics for a given user
  * @param username: String
- * @return JSON TBD
+ * @return JSON {
+ *   programming_language_counts: {
+ *     language_name: usage_count...
+ *   }, topic_average_scores: {
+ *     topic_name: topic_count...
+ *   }
+ * }
  */
 app.get('/user_statistics', async (req, res) => {
 
+  const languages = await supabase
+    .from('Requests')
+    .select('programming_language');
+
+  if (languages.error) {
+    res.send(languages.error);
+  }
+
+  const topics = await supabase
+    .from('Responses')
+    .select('catagory, rating');
+
+  const language_counter = {};
+  
+  languages.data.forEach(ele => {
+    if (language_counter[ele.programming_language]) {
+        language_counter[ele.programming_language] += 1;
+    } else {
+        language_counter[ele.programming_language] = 1;
+    }
+  });
+
+  const topics_counter = {};
+  
+  topics.data.forEach(ele => {
+    if (topics_counter[ele.catagory]) {
+      topics_counter[ele.catagory] += 1;
+    } else {
+      topics_counter[ele.catagory] = 1;
+    }
+  });
+
+  const topics_average_score = {};
+
+  topics.data.forEach(ele => {
+    if (topics_average_score[ele.catagory]) {
+      topics_average_score[ele.catagory] += ele.rating;
+    } else {
+      topics_average_score[ele.catagory] = ele.rating;
+    }
+  });
+
+  for (const [key, value] of Object.entries(topics_average_score)) {
+    topics_average_score[key] = value / topics_counter[key];
+  }
+
+  if (languages.error) {
+    res.send(languages.error);
+  } else if (topics.error) {
+    res.send(topics.error);
+  } else {
+    res.send({
+      programming_language_counts: language_counter,
+      topics_counts: topics_counter,
+      topic_average_scores: topics_average_score,
+    });
+  }
 });
 
 /**
