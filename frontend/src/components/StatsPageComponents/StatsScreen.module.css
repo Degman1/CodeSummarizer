@@ -13,20 +13,27 @@
     height: 100%;
 }
 
-.smallDataBlock {
+.dataBlock {
     border-bottom: 1px solid black;
     grid-template-rows: 1fr 1fr;
     height: 50%;
     text-align: center;
-}
 
-.largeDataBlock {
-    border-bottom: 1px solid black;
-    grid-template-rows: 1fr 1fr;
-    height: 50%;
-    text-align: center;
+    display: flex;
+    flex-direction: row;
 }
 
 .chartRankContainer {
     border-top: 1px solid black;
+}
+
+
+.graphArea {
+    background-color: blue;
+    width: 50%;
+}
+
+.detailsArea {
+    background-color: red;
+    width: 50%;
 }
