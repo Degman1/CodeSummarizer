@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.8",
     "@supabase/supabase-js": "^2.41.1",
+    "anthropic": "^0.0.0",
     "express": "^4.19.2"
   },
   "type": "module"
