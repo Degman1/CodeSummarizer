@@ -1,49 +1,81 @@
-import st from './StatsScreen.module.css'
+import st from "./StatsScreen.module.css";
+import react, { useState } from "react";
 
 function StatScreen() {
-    function BuildLeftColumn() {
-        return (<div className={st.leftColumn}>{BuildDataBlockLarge('Coding Languages')}{BuildDataBlockLarge('Style Preferences')}</div>)
-    }
+  const [styleData, setStyleData] = useState({
+    style1: 3,
+    style2: 3,
+    style3: 1,
+    style4: 7,
+    style5: 0,
+    style6: 2,
+  });
 
-    function BuildRightColumn() {
-        return (<div className={st.rightColumn}>
-                {BuildDataBlockSmall('User Info')}
-                {BuildDataBlockSmall('User Data')}
-            </div>)
-    }
-    function BuildDataBlockSmall(header) {
-        return (<div className={st.smallDataBlock}>
-                <h1 className={st.header}>{header}</h1>
-            </div>)
-    }
-    function BuildDataBlockLarge(header, graph_title) {
-        return (<div className={st.largeDataBlock}>
-                <h1 className={st.header}>{header}</h1>
-                {BuildChartRankContainer(graph_title)}
-            </div>)
-    }
-    function BuildChartRankContainer(graph_title) {
-        return (<div className={st.chartRankContainer}>
-            {BuildRankings()}
-            {BuildGraph(0, 0, graph_title)}
-        </div>)
-    }
-    function BuildRankings() {
-        return (<div>
-            <h3>Rank</h3>
-        </div>)
-    }
-    function BuildGraph(data, graph_type, graph_title) {
-        return (<div>
+  const [languageData, setLanguageData] = useState({
+    Java: 2,
+    Python: 5,
+    Javascript: 3,
+  });
 
-        </div>)
-    }
+  function BuildDataBlock(header, graph = null) {
     return (
-        <div className={st.container}>
-            {BuildLeftColumn()}
-            {BuildRightColumn()}
-        </div>
+      <div className={st.dataBlock}>
+        <h1 className={st.header}>{header}</h1>
+        {graph && BuildChartRankContainer(graph)}
+        {BuildChartRankContainer()}
+      </div>
     );
+  }
+  function BuildChartRankContainer(graph_title) {
+    return (
+      <div className={st.chartRankContainer}>
+        {BuildRankings()}
+        {BuildGraph(0, 0, graph_title)}
+      </div>
+    );
+  }
+  function BuildRankings() {
+    return (
+      <div>
+        <h3>Rank</h3>
+        <li>1. Java</li>
+        <li>2. Python</li>
+        <li>3. C</li>
+      </div>
+    );
+  }
+
+  function BuildGraph(data, graph_type, graph_title) {
+    return <div></div>;
+  }
+
+  return (
+    <div className={st.container}>
+      <div className={st.leftColumn}>
+        <h1 className={st.header}>Coding Languages</h1>
+        <div className={st.dataBlock}>
+          <div className={st.graphArea}>GRAPH AREA</div>
+          <div className={st.detailsArea}>DETAILS AREA</div>
+        </div>
+        <h1 className={st.header}>Style Preferences</h1>
+        <div className={st.dataBlock}>
+          <div className={st.graphArea}>GRAPH AREA</div>
+          <div className={st.detailsArea}>DETAILS AREA</div>
+        </div>
+      </div>
+
+      <div className={st.rightColumn}>
+        <h1 className={st.header}>User Info</h1>
+        <div className={st.dataBlock}>
+          <div className={st.detailsArea}>DETAILS AREA</div>
+        </div>
+        <h1 className={st.header}>Style Preferences</h1>
+        <div className={st.dataBlock}>
+          <div className={st.detailsArea}>User Data</div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default StatScreen
+export default StatScreen;
