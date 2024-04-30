@@ -1,0 +1,32 @@
+.container {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    height: 100%;
+}
+
+.leftColumn {
+    border-right: 1px solid black;
+    height: 100%;
+}
+
+.rightColumn {
+    height: 100%;
+}
+
+.smallDataBlock {
+    border-bottom: 1px solid black;
+    grid-template-rows: 1fr 1fr;
+    height: 50%;
+    text-align: center;
+}
+
+.largeDataBlock {
+    border-bottom: 1px solid black;
+    grid-template-rows: 1fr 1fr;
+    height: 50%;
+    text-align: center;
+}
+
+.chartRankContainer {
+    border-top: 1px solid black;
+}
