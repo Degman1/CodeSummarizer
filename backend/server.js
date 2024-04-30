@@ -138,12 +138,14 @@ app.get('/all_user_information', async (req, res) => {
  *   prompt: String,
  *   username: String,
  *   programming_language: String
+ *   title: String,
+ *   description: String
  * }]
  */
 app.get('/get_user_requests', async (req, res) => {
   const {data, error} = await supabase
     .from('Requests')
-    .select('request_id, creation_date, prompt, username, programming_language')
+    .select('request_id, creation_date, prompt, username, programming_language, title, description')
     .eq("username", req.query.username);
   if (error) {
     res.send(error);
@@ -181,6 +183,8 @@ app.get('/get_responses', async (req, res) => {
  * @param username: String
  * @param prompt: String
  * @param programming_language: String
+ * @param title: String
+ * @param description: String
  * @return JSON [{
  *   request_id: Int,
  *   response_id: Int,
@@ -196,6 +200,8 @@ app.get('/submit_request', async (req, res) => {
       prompt: req.query.prompt,
       username: req.query.username,
       programming_language: req.query.programming_language,
+      title: req.query.title,
+      description: req.query.description,
     })
     .select();
 
