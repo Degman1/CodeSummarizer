@@ -1,19 +1,5 @@
 import st from './NewProjectScreen.module.css'
-import react, { useState } from 'react'
-
-/*
- Steps:
-  upload code
-  set title
-  set description
-  set author
-
-  upload code
-
-  submit button
-
-  back to project screen
-*/
+import React, { useState } from 'react';
 
 function NewProjectScreen({ closeNewProjectScreen }) {
     const [form, setForm] = useState({
@@ -40,7 +26,7 @@ function NewProjectScreen({ closeNewProjectScreen }) {
         console.log(form);
         console.log(code);
         if(!code) {
-            //fail
+            alert('Please upload a code snippet.');
         }
     };
 
@@ -48,65 +34,58 @@ function NewProjectScreen({ closeNewProjectScreen }) {
         if (!event || event.target === event.currentTarget) {
             closeNewProjectScreen();
         }
-    }
+    };
 
     return (
-        <div
-            className={st.outsideForm}
-            onClick={(e) => handleClose(e)}
-        >
-            <div className={st.container}>
-                <button
-                    className={st.closeX}
-                    onClick={() => handleClose()}
-                >X</button>
-                <form
-                    className={st.form}
-                    onSubmit={handleSubmit}
-                >
-                    <div className={st.fieldContainer1}>
+        <div className={st.outsideForm} onClick={handleClose}>
+            <div className={st.container} onClick={e => e.stopPropagation()}>
+                <button className={st.closeX} onClick={handleClose}>X</button>
+                <form className={st.form} onSubmit={handleSubmit}>
+                    <div className={st.fieldContainer}>
                         <label htmlFor="title">Title:</label>
                         <input
                             type="text"
                             id="title"
                             name="title"
+                            placeholder="Enter project title"
                             value={form.title}
                             onChange={handleInputChange}
                         />
                     </div>
-                    <div className={st.fieldContainer1}>
+                    <div className={st.fieldContainer}>
                         <label htmlFor="author">Author:</label>
                         <input
                             type="text"
                             id="author"
                             name="author"
+                            placeholder="Project author"
                             value={form.author}
                             onChange={handleInputChange}
                         />
                     </div>
-                    <div className={st.fieldContainer1}>
+                    <div className={st.fieldContainer}>
                         <label htmlFor="description">Description:</label>
                         <textarea
                             id="description"
                             name="description"
+                            placeholder="Describe the project"
                             value={form.description}
                             onChange={handleInputChange}
                         />
                     </div>
-                    <div className={st.fieldContainer1}>
+                    <div className={st.fieldContainer}>
                         <label htmlFor="code">Code Snippet:</label>
                         <input
                             type="file"
                             id="code"
                             onChange={handleFileChange}
-                            accept=".js,.py,.java,.txt,.c,.cpp,.cs,.rb,.php,.scala,.swift,.go,.ts,.jsx,.tsx"  // either have this or remove attribute entirely to accept all types, then do server side validation ?
+                            accept=".js,.py,.java,.txt,.c,.cpp,.cs,.rb,.php,.scala,.swift,.go,.ts,.jsx,.tsx"
                         />
                     </div>
                     <button className={st.submitButton} type="submit">Submit</button>
                 </form>
             </div>
         </div>
-
     );
 }
 

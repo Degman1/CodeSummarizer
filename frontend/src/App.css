@@ -66,5 +66,20 @@
 .page-content {
   height: 90%;
   width: 100%;
+  padding: 20px; 
   overflow: hidden;
+}
+
+body {
+  font-family: 'Arial', sans-serif; 
+  background-color: #f8f9fa; 
+  color: #333; 
+}
+
+.navbar, .nav-link {
+  font-size: 16px; 
+}
+
+.card {
+  margin-bottom: 20px;
 }

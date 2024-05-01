@@ -1,5 +1,6 @@
 import st from './ProjectList.module.css'
-import react, { useState } from 'react'
+import React, { useState } from 'react';
+import { Card, Button, ListGroup, Container, Row, Col } from 'react-bootstrap';
 import NewProjectScreen from './NewProjectScreen'
 import SummariesScreen from './SummariesScreen'
 
@@ -130,6 +131,19 @@ function ProjectList() {
 
     const buildDate = (timestamp) => new Date(timestamp).toLocaleDateString()
 
+    const handleProjectSelect = (project) => {
+        setSelectedProject(selectedProject === project ? null : project);
+    };
+
+    if (viewingSummaries && selectedProject) {
+        return (
+            <SummariesScreen
+                backFunc={() => setViewingSummaries(false)}
+                selectedProject={selectedProject}
+            />
+        );
+    }
+
     const buildProjectRow = (project) => {
         return (
             <div
@@ -176,25 +190,47 @@ function ProjectList() {
         </div>)
     }
 
-
     return (
-        <div className={st.content}>
+        <Container fluid>
             {newProjectScreen && <NewProjectScreen closeNewProjectScreen={() => setNewProjectScreen(false)} />}
-            <div className={st.summaryColumns}>
-                <div className={st.projectList}>
-                    {projects.map((p) => buildProjectRow(p))}
-                    <div className={st.createNewProject}>
-                        <button onClick={() => setNewProjectScreen(true)}>Create new project</button>
-                    </div>
-                </div>
-                <div className={st.projectContent}>
-                    {selectedProject && buildCodeSnippet(selectedProject.codeSnippet)}
-                    {selectedProject && buildProjectDetails(selectedProject)}
-                    {!selectedProject && <i className={st.noProjectSelected}>Select a project for details</i>}
-                </div>
-            </div>
-        </div>
+            <Row>
+                <Col md={4} className="project-list-column">
+                    <ListGroup>
+                        {projects.map(project => (
+                            <ListGroup.Item
+                                key={project.projectId}
+                                action
+                                onClick={() => handleProjectSelect(project)}
+                                active={selectedProject === project}
+                            >
+                                {project.name} - {project.author}
+                                <div><small>{new Date(project.timestamp).toLocaleDateString()}</small></div>
+                            </ListGroup.Item>
+                        ))}
+                        <Button variant="primary" onClick={() => {
+                            setNewProjectScreen(true);
+                        }}>Create new project</Button>
+                    </ListGroup>
+                </Col>
+                <Col md={8}>
+                    {selectedProject ? (
+                        <Card>
+                            <Card.Header>{selectedProject.name}</Card.Header>
+                            <Card.Body>
+                                <Card.Title>Description</Card.Title>
+                                <Card.Text>{selectedProject.description}</Card.Text>
+                                <Card.Title>Code Snippet</Card.Title>
+                                <pre>{selectedProject.codeSnippet}</pre>
+                            </Card.Body>
+                        </Card>
+                    ) : (
+                        <div>Select a project for details</div>
+                    )}
+                </Col>
+            </Row>
+        </Container>
     );
+    
 }
 
-export default ProjectList
+export default ProjectList;

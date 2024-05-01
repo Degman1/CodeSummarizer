@@ -141,3 +141,10 @@
     justify-content: flex-end;
     align-items: flex-end;
 }
+
+.project-list-column {
+    /* This ensures the column doesn't resize or move */
+    position: static; 
+    width: 33.3333%; 
+    min-height: 100vh; 
+}
