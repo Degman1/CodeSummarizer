@@ -67,11 +67,11 @@ function StatScreen() {
       <div className={st.rightColumn}>
         <h1 className={st.header}>User Info</h1>
         <div className={st.dataBlock}>
-          <div className={st.detailsArea}>DETAILS AREA</div>
+          <div className={st.userDetailsArea}>DETAILS AREA</div>
         </div>
         <h1 className={st.header}>Style Preferences</h1>
         <div className={st.dataBlock}>
-          <div className={st.detailsArea}>User Data</div>
+          <div className={st.userDetailsArea}>User Data</div>
         </div>
       </div>
     </div>
