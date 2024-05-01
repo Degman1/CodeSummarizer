@@ -222,7 +222,7 @@ app.post('/submit_request', upload.single('prompt'), async (req, res) => {
       programming_language,
       title,
       description,
-    });
+    }).select();
 
   if (error) {
     // error handle
@@ -230,7 +230,8 @@ app.post('/submit_request', upload.single('prompt'), async (req, res) => {
   console.log(data)
   // I didn't touch anything below this -Jake
 
-  const request_data = () => data[0];
+  // TODO: Make the request id part work
+  const request_id = -1;
 
   if (fileContents.length > 0) { // && fileContents[0].request_id != undefined) {
     // Get the list of responses and their respective catagories
@@ -239,12 +240,18 @@ app.post('/submit_request', upload.single('prompt'), async (req, res) => {
 
     // Add the request id to each response object
     responses.forEach(response => {
-      response["request_id"] = request_data().request_id;
+      response["request_id"] = request_id;
+    });
+
+    // TODO: Add the category column to the Responses table in the database
+    // Remove the "category" field from the response object for now to avoid errors
+    responses.forEach(response => {
+      response.category = "";
     });
 
     // Log the responses
     const { data, error } = await supabase
-      .from('Responses')
+      .from("Responses")
       .insert(responses)
       .select();
 
