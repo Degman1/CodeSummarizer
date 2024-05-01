@@ -16,24 +16,14 @@ function App() {
   const [subPage, setSubpage] = useState('login');
   const [openAccountTab, setOpenAccountTab] = useState(false);
   const { currentUser, logout } = useAuth() || {};
-  const navigate = useNavigate();
-  const buildNavButton = (page) => {
-    return (
-      <Button variant="primary" onClick={() => {
-        setSubpage(page);
-        setOpenAccountTab(false);
-      }}>
-        {page}
-      </Button>
-    );
-  };
+  // const navigate = useNavigate();
 
   async function handleLogout() {
     setError('');
 
     try {
       await logout();
-      navigate('/login'); 
+      // navigate('/login');
     } catch {
       setError('Failed to log out');
     }
