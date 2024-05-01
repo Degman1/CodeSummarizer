@@ -191,9 +191,9 @@ function ProjectList() {
     }
 
     return (
-        <Container fluid>
+        <Container fluid className="custom-container"> 
             {newProjectScreen && <NewProjectScreen closeNewProjectScreen={() => setNewProjectScreen(false)} />}
-            <Row>
+            <Row className="custom-row"> 
                 <Col md={4} className="project-list-column">
                     <ListGroup>
                         {projects.map(project => (
@@ -207,12 +207,10 @@ function ProjectList() {
                                 <div><small>{new Date(project.timestamp).toLocaleDateString()}</small></div>
                             </ListGroup.Item>
                         ))}
-                        <Button variant="primary" onClick={() => {
-                            setNewProjectScreen(true);
-                        }}>Create new project</Button>
+                        <Button variant="primary" onClick={() => setNewProjectScreen(true)}>Create new project</Button>
                     </ListGroup>
                 </Col>
-                <Col md={8}>
+                <Col md={8} className="project-details-column"> 
                     {selectedProject ? (
                         <Card>
                             <Card.Header>{selectedProject.name}</Card.Header>
@@ -230,6 +228,7 @@ function ProjectList() {
             </Row>
         </Container>
     );
+    
     
 }
 

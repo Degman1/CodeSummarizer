@@ -1,11 +1,15 @@
 // 
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Navbar, Nav, Button, Container } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Button, Container } from 'react-bootstrap';
 import ProjectList from './components/ProjectPageComponents/ProjectList';
 import StatScreen from './components/StatsPageComponents/StatsScreen';
 import AccountDropdown from './components/AccountDropdownComponents/AccountDropdown';
 import HomePage from './components/HomePageComponents/HomePage';
+import Signup from './components/Signup';
+import { AuthProvider } from './components/contexts/AuthContext';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Login from './components/Login';
 
 function App() {
   const [subPage, setSubpage] = useState('Home');
@@ -38,7 +42,7 @@ function App() {
   const NavigationBar = () => {
     return (
       <Navbar bg="dark" variant="dark" expand="lg" className="mb-4">
-        <Navbar.Brand href="#home">Project Tracker</Navbar.Brand>
+        <Navbar.Brand href="#home">Code Summarizer</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
@@ -67,13 +71,32 @@ function App() {
   );
 
   return (
-    <div className='page'>
-      <NavigationBar />
-      <div className='page-content'>
-        {buildSubPage()}
-      </div>
-      <Footer />
-    </div>
+    <Router>
+      <AuthProvider>
+        <NavigationBar />
+        <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
+          <div className="w-100">
+            <Routes>
+              <Route path="/" element={buildSubPage()} />
+              <Route path="/projects" element={buildSubPage()} />
+              <Route path="/stats" element={buildSubPage()} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </div>
+        </Container>
+        <Footer />
+      </AuthProvider>
+    </Router>
+    
+    // <div className='page'>
+      
+    //   <NavigationBar />
+    //   <div className='page-content'>
+    //     {buildSubPage()}
+    //   </div>
+    //   <Footer />
+    // </div>
   );
 }
 
