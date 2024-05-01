@@ -65,7 +65,7 @@ function ProjectList() {
     return (
         <Container style={{ flex: '1', height: '100%', width: '100%', margin: '0', paddingRight: '0', paddingLeft: '0' }} fluid>
             {newProjectScreen && <NewProjectScreen closeNewProjectScreen={() => setNewProjectScreen(false)} />}
-            <Row style={{ minHeight: '100%', margin: '0', width: '100%', height: '100%', flex: '1'}}>
+            <Row style={{ minHeight: '100%', margin: '0', width: '100%', height: '100%', flex: '1' }}>
                 <Col md={4} className={st.projectListColumn}>
                     <ListGroup>
                         {projects.map(project => (
@@ -74,12 +74,13 @@ function ProjectList() {
                                 action
                                 onClick={() => handleProjectSelect(project)}
                                 active={selectedProject === project}
+                                style={{ borderTopLeftRadius: '0', borderTopRightRadius: '0' }}
                             >
                                 {project.title || `Untitled Project ${project.request_id}`}
                                 <div><small>{new Date(project.creation_date).toLocaleDateString()}</small></div>
                             </ListGroup.Item>
                         ))}
-                        <Button style={{marginTop: '1.5vh', width: '50%', marginLeft: '25%'}} variant="primary" onClick={() => {
+                        <Button style={{ marginTop: '1.5vh', width: '50%', marginLeft: '25%' }} variant="primary" onClick={() => {
                             setNewProjectScreen(true);
                         }}>Create new project</Button>
                     </ListGroup>
@@ -90,9 +91,12 @@ function ProjectList() {
                             <Card.Header>{selectedProject.title || `Untitled Project ${selectedProject.request_id}`}</Card.Header>
                             <Card.Body>
                                 <Card.Title>Code Snippet</Card.Title>
-                                <pre>{selectedProject.prompt}</pre>
+                                <Card.Text style={{ height: '40vh', overflowY: 'auto' }}>
+                                    <pre>{selectedProject.prompt}</pre>
+                                </Card.Text>
                                 <Card.Title>Description</Card.Title>
-                                <Card.Text>{selectedProject.description}
+                                <Card.Text style={{ height: '12vh', overflowY: 'auto' }}>
+                                    <pre>{selectedProject.description}</pre>
                                 </Card.Text>
                                 <button onClick={() => setViewingSummaries(true)}>View Summaries</button>
                             </Card.Body>
