@@ -1,5 +1,7 @@
+import React from "react";
 import st from "./StatsScreen.module.css";
 import react, { useState } from "react";
+import { Chart } from "react-google-charts";
 
 function StatScreen() {
   const [styleData, setStyleData] = useState({
@@ -17,6 +19,12 @@ function StatScreen() {
     Javascript: 3,
   });
 
+  // const [languageData, setLanguageData] = useState({
+  //   ['Java', 2]
+  //   Python: 5,
+  //   Javascript: 3,
+  // });
+
   const [userInfo, setUserInfo] = useState({
     Name: 'Jacob Sweet',
     Email: 'jacobsweet@umass.edu',
@@ -26,6 +34,12 @@ function StatScreen() {
     'Account Created': '5/1/2024',
     'Summary Count' : 10
   });
+
+  const pieChartOptions = {
+    piehole: 0.4,
+    is3d: false
+  }
+
 
   function BuildDataBlock(header, graph = null) {
     return (
@@ -60,16 +74,25 @@ function StatScreen() {
       </div>
     );
   }
-  function BuildGraph(data, graph_type) {
+  function BuildGraph(data, options, graph_type) {
     if (graph_type == 'pie') {
-
+      return (<div>
+        <Chart
+          chartType="PieChart"
+          data={data}
+          options={options}
+        />
+        </div>);
     }
     else if (graph_type == 'bar') {
-      
+      return (<div>
+        <Chart
+          chartType="BarChart"
+          data={data}
+          options={options}
+        />
+        </div>);
     }
-    return (<div>
-      
-    </div>);
   }
   function BuildUser(data) {
     return (
@@ -93,7 +116,9 @@ function StatScreen() {
           <div className={st.detailsArea}>
             {BuildRankings(languageData)}
           </div>
-          <div className={st.graphArea}>GRAPH AREA</div>
+          <div className={st.graphArea}>
+            {BuildGraph(languageData, pieChartOptions, 'pie')}
+          </div>
         </div>
         <h1 className={st.header}>Style Preferences</h1>
         <div className={st.dataBlock}>
