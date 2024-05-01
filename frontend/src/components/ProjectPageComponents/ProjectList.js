@@ -63,6 +63,47 @@ function ProjectList() {
     }
 
     return (
+        <Container fluid className="custom-container"> 
+            {newProjectScreen && <NewProjectScreen closeNewProjectScreen={() => setNewProjectScreen(false)} />}
+            <Row className="custom-row"> 
+                <Col md={4} className="project-list-column">
+                    <ListGroup>
+                        {projects.map(project => (
+                            <ListGroup.Item
+                                key={project.projectId}
+                                action
+                                onClick={() => handleProjectSelect(project)}
+                                active={selectedProject === project}
+                            >
+                                {project.name} - {project.author}
+                                <div><small>{new Date(project.timestamp).toLocaleDateString()}</small></div>
+                            </ListGroup.Item>
+                        ))}
+                        <Button variant="primary" onClick={() => setNewProjectScreen(true)}>Create new project</Button>
+                    </ListGroup>
+                </Col>
+                <Col md={8} className="project-details-column"> 
+                    {selectedProject ? (
+                        <Card>
+                            <Card.Header>{selectedProject.name}</Card.Header>
+                            <Card.Body>
+                                <Card.Title>Description</Card.Title>
+                                <Card.Text>{selectedProject.description}</Card.Text>
+                                <Card.Title>Code Snippet</Card.Title>
+                                <pre>{selectedProject.codeSnippet}</pre>
+                            </Card.Body>
+                        </Card>
+                    ) : (
+                        <div>Select a project for details</div>
+                    )}
+                </Col>
+            </Row>
+        </Container>
+    );
+    
+    
+}
+    return (
         <Container fluid>
             {newProjectScreen && <NewProjectScreen closeNewProjectScreen={() => setNewProjectScreen(false)} />}
             <Row>
