@@ -12,7 +12,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
 
 function App() {
-  const [subPage, setSubpage] = useState('Home');
+  const [subPage, setSubpage] = useState('login');
   const [openAccountTab, setOpenAccountTab] = useState(false);
 
   const buildNavButton = (page) => {
@@ -28,6 +28,8 @@ function App() {
 
   const buildSubPage = () => {
     switch (subPage) {
+      case 'login':
+        return <Login/>;
       case 'Home':
         return <HomePage />;
       case 'Projects':
@@ -75,11 +77,12 @@ function App() {
         <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
           <div className="w-100">
             <Routes>
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/" element={buildSubPage()} />
               <Route path="/projects" element={buildSubPage()} />
               <Route path="/stats" element={buildSubPage()} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/login" element={<Login />} />
+              
             </Routes>
           </div>
         </Container>
