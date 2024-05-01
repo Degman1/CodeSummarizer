@@ -37,3 +37,12 @@
     background-color: red;
     width: 50%;
 }
+
+.userDetailsArea {
+    background-color: red;
+    width: 100%;
+}
+
+.header {
+    text-align: center;
+}

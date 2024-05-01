@@ -1,5 +1,5 @@
 import st from './ProjectList.module.css'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Button, ListGroup, Container, Row, Col } from 'react-bootstrap';
 import NewProjectScreen from './NewProjectScreen'
 import SummariesScreen from './SummariesScreen'
@@ -127,68 +127,90 @@ function ProjectList() {
     const [selectedProject, setSelectedProject] = useState('')
     const [viewingSummaries, setViewingSummaries] = useState(false)
 
+    // fetch functions and calling
+
+    const fetchUserRequests = async (username) => {
+        try {
+            const response = await fetch(`http://localhost:4000/all_user_information`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Failed to fetch user requests:', error);
+            return null;
+        }
+    };
+
+    useEffect(() => {
+        fetchUserRequests('Jake').then((data) => {
+            console.log(data);
+        });
+    }, [])
+
     // build functions
 
     const buildDate = (timestamp) => new Date(timestamp).toLocaleDateString()
 
-    const handleProjectSelect = (project) => {
-        setSelectedProject(selectedProject === project ? null : project);
-    };
+            const handleProjectSelect = (project) => {
+                setSelectedProject(selectedProject === project ? null : project);
+            };
 
-    if (viewingSummaries && selectedProject) {
-        return (
-            <SummariesScreen
-                backFunc={() => setViewingSummaries(false)}
-                selectedProject={selectedProject}
-            />
-        );
-    }
+            if (viewingSummaries && selectedProject) {
+                return (
+                    <SummariesScreen
+                        backFunc={() => setViewingSummaries(false)}
+                        selectedProject={selectedProject}
+                    />
+                );
+            }
 
-    const buildProjectRow = (project) => {
-        return (
-            <div
-                className={st.projectRow}
-                onClick={() => setSelectedProject((old) => old === project ? null : project)}
-                key={project.projectId}
-            >
-                <div className={st.projectName}>{project.name}</div>
-                <div className={st.projectAuthor}>{project.author}</div>
-                <div className={st.projectTimestamp}>{buildDate(project.timestamp)}</div>
-            </div>
-        )
-    }
+            const buildProjectRow = (project) => {
+                return (
+                    <div
+                        className={st.projectRow}
+                        onClick={() => setSelectedProject((old) => old === project ? null : project)}
+                        key={project.projectId}
+                    >
+                        <div className={st.projectName}>{project.name}</div>
+                        <div className={st.projectAuthor}>{project.author}</div>
+                        <div className={st.projectTimestamp}>{buildDate(project.timestamp)}</div>
+                    </div>
+                )
+            }
 
-    const buildCodeSnippet = (code) => {
-        return (<div className={st.codeSnippet}>
-            <pre>{code}</pre>
-        </div>)
-    }
+            const buildCodeSnippet = (code) => {
+                return (<div className={st.codeSnippet}>
+                    <pre>{code}</pre>
+                </div>)
+            }
 
-    const buildProjectDetails = (project) => {
-        return (<div className={st.projectDetails}>
-            <div className={st.topRow}>
-                <span>{project.name} <i className={st.projectId}>#{project.projectId}</i></span>
-                <p>
-                    {project.author} <small>{buildDate(project.timestamp)}</small>
-                </p>
-            </div>
-            <div className={st.middleRow}>
-                <p>{project.description}</p>
-            </div>
-            <div className={st.bottomRow}>
-                <button onClick={() => setViewingSummaries(true)}>View Summaries</button>
-            </div>
-        </div>)
-    }
+            const buildProjectDetails = (project) => {
+                return (<div className={st.projectDetails}>
+                    <div className={st.topRow}>
+                        <span>{project.name} <i className={st.projectId}>#{project.projectId}</i></span>
+                        <p>
+                            {project.author} <small>{buildDate(project.timestamp)}</small>
+                        </p>
+                    </div>
+                    <div className={st.middleRow}>
+                        <p>{project.description}</p>
+                    </div>
+                    <div className={st.bottomRow}>
+                        <button onClick={() => setViewingSummaries(true)}>View Summaries</button>
+                    </div>
+                </div>)
+            }
 
-    if (viewingSummaries) {
-        return (<div className={st.content}>
-            <SummariesScreen
-                backFunc={() => setViewingSummaries(false)}
-                selectedProject={selectedProject}
-            />
-        </div>)
-    }
+            if (viewingSummaries) {
+                return (<div className={st.content}>
+                    <SummariesScreen
+                        backFunc={() => setViewingSummaries(false)}
+                        selectedProject={selectedProject}
+                    />
+                </div>)
+            }
 
     return (
         <Container fluid className="custom-container"> 
