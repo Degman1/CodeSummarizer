@@ -63,9 +63,9 @@ function ProjectList() {
     }
 
     return (
-        <Container style={{backgroundColor:'red', height: '100%', width: '100%'}} fluid>
+        <Container style={{ border: '2px solid black', borderRadius: '0.5vw', flex: '1', height: '100%', width: '100%', margin: '0' }} fluid>
             {newProjectScreen && <NewProjectScreen closeNewProjectScreen={() => setNewProjectScreen(false)} />}
-            <Row>
+            <Row style={{ minHeight: '100%', margin: '0', width: '100%', height: '100%', flex: '1' }}>
                 <Col md={4} className="project-list-column">
                     <ListGroup>
                         {projects.map(project => (

@@ -11,7 +11,7 @@
     margin-left: 25%; /* Push the main content area to the right */
     width: 75%; /* Remaining width of the viewport */
     padding: 20px; /* Padding inside the content area */
-    min-height: 100vh; /* Full height */
+    /* min-height: 100vh; Full height */
 }
 
 /* Ensure that the row containing these columns does not have any unexpected padding or margin */

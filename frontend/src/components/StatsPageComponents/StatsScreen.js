@@ -37,10 +37,11 @@ function StatScreen() {
   function BuildRankings() {
     return (
       <div>
-        <h3>Rank</h3>
-        <li>1. Java</li>
-        <li>2. Python</li>
-        <li>3. C</li>
+        {
+        Object.keys(languageData).map((key) => {
+          return <li>{key}: {languageData[key]}</li>
+        })
+        }
       </div>
     );
   }
