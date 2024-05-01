@@ -1,12 +1,60 @@
-import react, { useState } from 'react'
+import react, { useState, useEffect } from 'react'
 import st from './SummariesScreen.module.css'
 function SummariesScreen({ backFunc, selectedProject }) {
 
     const [viewing, setViewing] = useState('code')
-    const [summaries, setSummaries] = useState({
-        summary1: 'long chatgpt generated summary1', summary2: 'long chatgpt generated summary2',
-        summary3: 'long chatgpt generated summary3', summary4: 'long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 long chatgpt generated summary4. long chatgpt generated summary4 '
-    })
+    const [summaries, setSummaries] = useState([])
+
+    const fetchUserRequests = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/get_responses?request_id=${encodeURIComponent(selectedProject.request_id)}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Failed to fetch user requests:', error);
+            return null;
+        }
+    };
+
+    const submitRating = async (responseId, rating) => {
+        const data = {
+            response_id: responseId,
+            rating: rating
+        };
+
+        try {
+            const response = await fetch('http://localhost:4000/rate_response', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const result = await response.json();  // Parse as JSON
+            console.log(result);
+            return result;
+        } catch (error) {
+            console.error('Failed to post rating:', error);
+            return null;
+        }
+    };
+
+
+    useEffect(() => {
+        console.log(selectedProject)
+        fetchUserRequests().then(data => {
+            console.log(data)
+            setSummaries(data)
+        })
+    }, [])
 
     const buildCodeSnippetArea = (code) => {
         return (<div className={st.summaryArea}>
@@ -20,19 +68,25 @@ function SummariesScreen({ backFunc, selectedProject }) {
         </div>)
     }
 
-    const buildRatingArea = () => {
-        const names = {
-            summary1: 'Summary 1', summary2: 'Summary 2', summary3: 'Summary 3', summary4: 'Summary 4'
-        }
+    const buildRatingArea = (summaryIndex) => {
+        let responesId = summaries[summaryIndex].response_id;
         return (
             <>
-                <p>{names[viewing]}</p>
+                <p>Summary #{summaryIndex + 1}</p>
                 <p>This summary was generated in the 'XXXX' and 'YYYYY' styles.</p>
-                <button>Chose as preferred style</button>
+                <p>This is currently rated: {summaries[summaryIndex].rating || '-'}/5</p>
+                <div className={st.ratingsRow}>
+                    <button onClick={() => submitRating(responesId, 1)}>1</button>
+                    <button onClick={() => submitRating(responesId, 2)}>2</button>
+                    <button onClick={() => submitRating(responesId, 3)}>3</button>
+                    <button onClick={() => submitRating(responesId, 4)}>4</button>
+                    <button onClick={() => submitRating(responesId, 5)}>5</button>
+                </div>
             </>
         )
     }
 
+    let summaryNum = viewing[viewing.length - 1] - 1;
     return (
         <div className={st.container}>
             <div className={st.topBar}>
@@ -40,7 +94,7 @@ function SummariesScreen({ backFunc, selectedProject }) {
                     onClick={backFunc}
                     className={st.backArrow}
                 >{"<"}</span>
-                <span className={st.projectName}>{selectedProject.name}</span>
+                <span className={st.projectName}>{selectedProject.title || `Untitled Project ${selectedProject.request_id}`}</span>
                 <span className={st.projectId}>#{selectedProject.projectId}</span>
                 <label for='contentViewed'>View:
                     <select
@@ -48,22 +102,21 @@ function SummariesScreen({ backFunc, selectedProject }) {
                         onChange={(e) => setViewing(e.target.value)}
                     >
                         <option value='code'>Code</option>
-                        <option value='summary1'>Summary 1</option>
-                        <option value='summary2'>Summary 2</option>
-                        <option value='summary3'>Summary 3</option>
-                        <option value='summary4'>Summary 4</option>
+                        {summaries.map((summary, i) => {
+                            return <option value={`summary${i + 1}`}>{`Summary ${i + 1}`}</option>
+                        })}
                     </select>
                 </label>
 
             </div>
             <div className={st.bottomContent}>
                 <div className={st.summaryText}>
-                    {viewing === 'code' && buildCodeSnippetArea(selectedProject.codeSnippet)}
-                    {viewing !== 'code' && buildSummaryTextArea(summaries?.[viewing])}
+                    {viewing === 'code' && buildCodeSnippetArea(selectedProject.prompt)}
+                    {viewing !== 'code' && buildSummaryTextArea(summaries?.[summaryNum]?.text)}
                 </div>
                 <div className={st.ratingArea}>
                     {viewing === 'code' && <p>Select a summary in the 'View' dropdown to rate</p>}
-                    {viewing !== 'code' && buildRatingArea()}
+                    {viewing !== 'code' && buildRatingArea(summaryNum)}
                 </div>
             </div>
         </div>
