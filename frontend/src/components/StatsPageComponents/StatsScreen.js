@@ -1,16 +1,44 @@
 import React from "react";
 import st from "./StatsScreen.module.css";
-import react, { useState } from "react";
+import react, { useState , useEffect } from "react";
 import { Chart } from "react-google-charts";
 
 function StatScreen() {
-  const [styleData, setStyleData] = useState({
-    style1: 3,
-    style2: 3,
-    style3: 1,
-    style4: 7,
-    style5: 0,
-    style6: 2,
+
+  const fetchUserInformation = async (username) => {
+    try {
+        const response = await fetch(`http://localhost:4000/user_information?username=${encodeURIComponent(username)}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Failed to fetch user requests:', error);
+        return null;
+    }
+  };
+
+  fetchUserInformation('dgerard').then((data) => {
+      console.log(data);
+  });
+
+  const fetchStatistics = async (username) => {
+    try {
+        const response = await fetch(`http://localhost:4000/user_statistics?username=${encodeURIComponent(username)}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Failed to fetch user requests:', error);
+        return null;
+    }
+  };
+
+  fetchStatistics('dgerard').then((data) => {
+      console.log(data)
   });
 
   const pieChartData = [
@@ -23,12 +51,21 @@ function StatScreen() {
   const barChartData = [
     ["Style", "Score", {role: "style"}],
     ["style1", 3, "green"],
-    ["style2", 3, "white"],
+    ["style2", 3, "gold"],
     ["style3", 1, "blue"],
     ["style4", 7, "red"],
     ["style5", 0, "yellow"],
     ["style6", 2, "orange"]
   ];
+
+  const [styleData, setStyleData] = useState({
+    style1: 3,
+    style2: 3,
+    style3: 1,
+    style4: 7,
+    style5: 0,
+    style6: 2,
+  });
 
   const [languageData, setLanguageData] = useState({
     Java: 2,
@@ -52,7 +89,7 @@ function StatScreen() {
   }
 
   const barChartOptions = {
-  
+    
   }
 
 
@@ -69,7 +106,7 @@ function StatScreen() {
     return (
       <div className={st.chartRankContainer}>
         {BuildRankings()}
-        {BuildGraph(0, 0, graph_title)}
+        {BuildChart(0, 0, graph_title)}
       </div>
     );
   }
@@ -89,7 +126,7 @@ function StatScreen() {
       </div>
     );
   }
-  function BuildGraph(data, options, graph_type) {
+  function BuildChart(data, options, graph_type) {
     if (graph_type == 'pie') {
       return (<div>
         <Chart
@@ -107,6 +144,7 @@ function StatScreen() {
           chartType="ColumnChart"
           data={data}
           options={options}
+          width="95%"
         />
         </div>);
     }
@@ -134,7 +172,7 @@ function StatScreen() {
             {BuildRankings(languageData)}
           </div>
           <div className={st.graphArea}>
-            {BuildGraph(pieChartData, pieChartOptions, 'pie')}
+            {BuildChart(pieChartData, pieChartOptions, 'pie')}
           </div>
         </div>
         <h1 className={st.header}>Style Preferences</h1>
@@ -143,7 +181,7 @@ function StatScreen() {
             {BuildRankings(styleData)}
           </div>
           <div className={st.graphArea}>
-            {BuildGraph(barChartData, barChartOptions, 'bar')}
+            {BuildChart(barChartData, barChartOptions, 'bar')}
           </div>
         </div>
       </div>

@@ -2,6 +2,8 @@
     display: grid;
     grid-template-columns: 3fr 1fr;
     height: 100%;
+    font-family: 'Arial', sans-serif;
+    color: 333;
 }
 
 .leftColumn {
@@ -45,6 +47,10 @@
 .header {
     height: 10%;
     text-align: center;
+}
+
+.outerList {
+    margin-left: 40%;
 }
 
 .listItem {
