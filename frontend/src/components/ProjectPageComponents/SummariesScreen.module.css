@@ -14,6 +14,7 @@
     padding: 0 1vw;
     gap: 1vw;
     height: 100%;
+    background-color: rgba(33, 37, 41, 0.03);
 }
 
 .topBar select {
