@@ -68,17 +68,29 @@ export async function getSummaries(code_snippet, programming_language) {
 
   return [
     {
-      text: await haiku.prompt("Summarize the following " + programming_language + " code snippet\n" + code_snippet),
+      text: await haiku.prompt("Summarize the following code snippet that is written in the programming language " + programming_language + ". \n" + code_snippet),
       category: "Brief Summary",
     },
     {
-      text: await haiku.prompt("Rate the following " + programming_language + " code snippet on a scale of 1 to 10\n" + code_snippet),
-      category: "Rating",
+      text: await haiku.prompt("Summarize the following code snippet that is written in the programming language " + programming_language + "\n" + code_snippet),
+      category: "Brief Summary",
     },
     {
-      text: await haiku.prompt("What are the main features of the following " + programming_language + " code snippet?\n" + code_snippet),
-      category: "Features",
-    }
+      text: await haiku.prompt("Summarize the following code snippet that is written in the programming language " + programming_language + "\n" + code_snippet),
+      category: "Brief Summary",
+    },
+    {
+      text: await haiku.prompt("Summarize the following code snippet that is written in the programming language " + programming_language + "\n" + code_snippet),
+      category: "Brief Summary",
+    },
+    // {
+    //   text: await haiku.prompt("Rate the following " + programming_language + " code snippet on a scale of 1 to 10\n" + code_snippet),
+    //   category: "Rating",
+    // },
+    // {
+    //   text: await haiku.prompt("What are the main features of the following " + programming_language + " code snippet?\n" + code_snippet),
+    //   category: "Features",
+    // }
   ];
 }
 
