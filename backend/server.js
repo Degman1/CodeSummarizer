@@ -210,40 +210,41 @@ app.post('/submit_request', upload.single('prompt'), async (req, res) => {
 
   // Convert buffer to string
   const fileContents = req.file.buffer.toString('utf8');
-  const { username, programming_language, title, description } = req.body;
-  console.log(fileContents)
-  console.log(username, programming_language, title, description)
+  const { username, programming_language, title, description } = req.query;
+  // console.log(fileContents)
+  // console.log(username, programming_language, title, description)
 
   const { data, error } = await supabase
     .from('Requests')
     .insert({
       prompt: fileContents, // Store the file contents as a string
-      username,
-      programming_language,
-      title,
-      description,
-    });
+      username: username,
+      programming_language: programming_language,
+      title: title,
+      description: description,
+    }).select();
 
   if (error) {
-    // error handle
+    res.send(error);
   }
-  console.log(data)
-  // I didn't touch anything below this -Jake
 
-  const request_data = () => data[0];
+  const request_data = data;
 
-  if (data.length > 0 && data[0].request_id != undefined) {
+  const request_id = data[0].request_id;
+
+  if (fileContents.length > 0) { // && fileContents[0].request_id != undefined) {
     // Get the list of responses and their respective catagories
-    let responses = Summarizer.getSummaries(req.query.prompt, req.query.programming_language);
+    // TODO: Make the programming language part work
+    const responses = await Summarizer.getSummaries(fileContents, programming_language);
 
     // Add the request id to each response object
     responses.forEach(response => {
-      response["request_id"] = request_data().request_id;
+      response["request_id"] = request_id;
     });
 
     // Log the responses
     const { data, error } = await supabase
-      .from('Responses')
+      .from("Responses")
       .insert(responses)
       .select();
 
@@ -254,7 +255,7 @@ app.post('/submit_request', upload.single('prompt'), async (req, res) => {
 
     // Return the response information
     res.send({
-      request: request_data(),
+      request: request_data,
       responses: data
     });
   } else {
