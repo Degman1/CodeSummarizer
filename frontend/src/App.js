@@ -75,8 +75,8 @@ function App() {
       <Router >
         <AuthProvider>
           <NavigationBar />
-          <Container className="d-flex align-items-center justify-content-center" style={{ height: "100%", flex: '1' }}>
-            <div style={{ height: '100%', width: '100%', flex: '1' }}>
+          <Container className="d-flex align-items-center justify-content-center" style={{ flex: '1', overflow: 'hidden' }}>
+            <div style={{ flex: '1', padding: '0', overflow: 'hidden' }}>
               <Routes>
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/login" element={<Login />} />
