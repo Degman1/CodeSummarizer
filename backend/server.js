@@ -185,6 +185,71 @@ app.get('/get_responses', async (req, res) => {
   }
 });
 
+
+import multer from 'multer';
+import fs from 'fs';
+const upload = multer({ storage: multer.memoryStorage() }); // Use memory storage to handle the file as a buffer
+
+app.post('/submit_request', upload.single('prompt'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+
+  // Convert buffer to string
+  const fileContents = req.file.buffer.toString('utf8');
+  const { username, programming_language, title, description } = req.body;
+  console.log(fileContents)
+  console.log(username, programming_language, title, description)
+
+  const { data, error } = await supabase
+    .from('Requests')
+    .insert({
+      prompt: fileContents, // Store the file contents as a string
+      username,
+      programming_language,
+      title,
+      description,
+    });
+
+  if (error) {
+    // error handle
+  }
+
+  // I didn't touch anything below this -Jake
+
+  const request_data = () => data[0];
+
+  if (data.length > 0 && data[0].request_id != undefined) {
+    // Get the list of responses and their respective catagories
+    let responses = Summarizer.getSummaries(req.query.prompt, req.query.programming_language);
+
+    // Add the request id to each response object
+    responses.forEach(response => {
+      response["request_id"] = request_data().request_id;
+    });
+
+    // Log the responses
+    const { data, error } = await supabase
+      .from('Responses')
+      .insert(responses)
+      .select();
+
+    if (error) {
+      res.send(error);
+      return;
+    }
+
+    // Return the response information
+    res.send({
+      request: request_data(),
+      responses: data
+    });
+  } else {
+    res.send("Failed to log request");
+  }
+});
+
+
 /**
  * Submit a request for a new summary
  * @param username: String
@@ -201,6 +266,7 @@ app.get('/get_responses', async (req, res) => {
  */
 app.get('/submit_request', async (req, res) => {
   // Log the request
+  console.log(req.query)
   const { data, error } = await supabase
     .from('Requests')
     .insert({
