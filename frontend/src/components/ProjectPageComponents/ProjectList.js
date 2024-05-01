@@ -63,34 +63,38 @@ function ProjectList() {
     }
 
     return (
-        <Container fluid className="custom-container">
+        <Container style={{backgroundColor:'red', height: '100%', width: '100%'}} fluid>
             {newProjectScreen && <NewProjectScreen closeNewProjectScreen={() => setNewProjectScreen(false)} />}
-            <Row className="custom-row">
+            <Row>
                 <Col md={4} className="project-list-column">
                     <ListGroup>
                         {projects.map(project => (
                             <ListGroup.Item
-                                key={project.projectId}
+                                key={project.request_id}
                                 action
                                 onClick={() => handleProjectSelect(project)}
                                 active={selectedProject === project}
                             >
-                                {project.name} - {project.author}
-                                <div><small>{new Date(project.timestamp).toLocaleDateString()}</small></div>
+                                {project.title || `Untitled Project ${project.request_id}`}
+                                <div><small>{new Date(project.creation_date).toLocaleDateString()}</small></div>
                             </ListGroup.Item>
                         ))}
-                        <Button variant="primary" onClick={() => setNewProjectScreen(true)}>Create new project</Button>
+                        <Button variant="primary" onClick={() => {
+                            setNewProjectScreen(true);
+                        }}>Create new project</Button>
                     </ListGroup>
                 </Col>
-                <Col md={8} className="project-details-column">
+                <Col md={8}>
                     {selectedProject ? (
                         <Card>
-                            <Card.Header>{selectedProject.name}</Card.Header>
+                            <Card.Header>{selectedProject.title || `Untitled Project ${selectedProject.request_id}`}</Card.Header>
                             <Card.Body>
-                                <Card.Title>Description</Card.Title>
-                                <Card.Text>{selectedProject.description}</Card.Text>
                                 <Card.Title>Code Snippet</Card.Title>
-                                <pre>{selectedProject.codeSnippet}</pre>
+                                <pre>{selectedProject.prompt}</pre>
+                                <Card.Title>Description</Card.Title>
+                                <Card.Text>{selectedProject.description}
+                                </Card.Text>
+                                <button onClick={() => setViewingSummaries(true)}>View Summaries</button>
                             </Card.Body>
                         </Card>
                     ) : (
@@ -101,51 +105,6 @@ function ProjectList() {
         </Container>
     );
 
-
 }
-// return (
-//     <Container fluid>
-//         {newProjectScreen && <NewProjectScreen closeNewProjectScreen={() => setNewProjectScreen(false)} />}
-//         <Row>
-//             <Col md={4} className="project-list-column">
-//                 <ListGroup>
-//                     {projects.map(project => (
-//                         <ListGroup.Item
-//                             key={project.request_id}
-//                             action
-//                             onClick={() => handleProjectSelect(project)}
-//                             active={selectedProject === project}
-//                         >
-//                             {project.title || `Untitled Project ${project.request_id}`}
-//                             <div><small>{new Date(project.creation_date).toLocaleDateString()}</small></div>
-//                         </ListGroup.Item>
-//                     ))}
-//                     <Button variant="primary" onClick={() => {
-//                         setNewProjectScreen(true);
-//                     }}>Create new project</Button>
-//                 </ListGroup>
-//             </Col>
-//             <Col md={8}>
-//                 {selectedProject ? (
-//                     <Card>
-//                         <Card.Header>{selectedProject.title || `Untitled Project ${selectedProject.request_id}`}</Card.Header>
-//                         <Card.Body>
-//                             <Card.Title>Code Snippet</Card.Title>
-//                             <pre>{selectedProject.prompt}</pre>
-//                             <Card.Title>Description</Card.Title>
-//                             <Card.Text>{selectedProject.description}
-//                             </Card.Text>
-//                             <button onClick={() => setViewingSummaries(true)}>View Summaries</button>
-//                         </Card.Body>
-//                     </Card>
-//                 ) : (
-//                     <div>Select a project for details</div>
-//                 )}
-//             </Col>
-//         </Row>
-//     </Container>
-// );
-// 
-// }
 
 export default ProjectList;

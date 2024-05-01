@@ -40,6 +40,12 @@ function SummariesScreen({ backFunc, selectedProject }) {
 
             const result = await response.json();  // Parse as JSON
             console.log(result);
+            setSummaries(summaries.map(summary => {
+                if (summary.response_id === responseId) {
+                    summary.rating = rating;
+                }
+                return summary;
+            }));
             return result;
         } catch (error) {
             console.error('Failed to post rating:', error);
