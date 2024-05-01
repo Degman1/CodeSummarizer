@@ -41,26 +41,24 @@ function App() {
 
   const NavigationBar = () => {
     return (
-      <Navbar bg="dark" variant="dark" expand="lg" className="mb-4">
-        <Navbar.Brand href="#home">Code Summarizer</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link onClick={() => setSubpage('Home')}>Home</Nav.Link>
-            <Nav.Link onClick={() => setSubpage('Projects')}>Projects</Nav.Link>
-            <Nav.Link onClick={() => setSubpage('Stats')}>Stats</Nav.Link>
-          </Nav>
-          <Nav>
-            <Nav.Link onClick={() => setOpenAccountTab(old => !old)}>
-              <img
-                src={`${process.env.PUBLIC_URL}/assets/userIcon.png`}
-                alt="Account"
-                style={{ cursor: 'pointer', width: 30, height: 30 }}
-              />
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+      <Navbar bg="dark" variant="dark" expand="lg" className="mb-4 navbar-custom">
+      <Navbar.Brand href="#home">Code Summarizer</Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="mr-auto">
+          <Nav.Link className="nav-link-custom" onClick={() => setSubpage('Home')}>Home</Nav.Link>
+          <Nav.Link className="nav-link-custom" onClick={() => setSubpage('Projects')}>Projects</Nav.Link>
+          <Nav.Link className="nav-link-custom" onClick={() => setSubpage('Stats')}>Stats</Nav.Link>
+        </Nav>
+        <Nav className="nav-right">
+          <NavDropdown title={<i className="bi bi-person-circle" style={{ fontSize: '1.5rem', cursor: 'pointer' }} />} id="nav-dropdown">
+            <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="#action/3.3">Logout</NavDropdown.Item>
+          </NavDropdown>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
     );
   };
 
