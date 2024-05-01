@@ -1,38 +1,143 @@
-.project-list-column {
-    width: 25%; /* Adjust width as necessary */
-    min-height: 100vh; /* Full height */
-    padding: 0 !important; /* Remove padding */
-    margin: 0 !important; /* Remove margins */
-    background-color: #f8f9fa; /* Background color */
-    border-right: 2px solid #dee2e6; /* Right border for a clear separation */
-}
-
-.project-details-column {
-    margin-left: 25%; /* Push the main content area to the right */
-    width: 75%; /* Remaining width of the viewport */
-    padding: 20px; /* Padding inside the content area */
-    /* min-height: 100vh; Full height */
-}
-
-/* Ensure that the row containing these columns does not have any unexpected padding or margin */
-.custom-row {
-    margin-right: 0 !important;
-    margin-left: 0 !important;
-    width: 100%; /* Ensures the row is full width */
-    margin: 0 !important; /* No external margins */
-}
-
-/* Also, adjust the Bootstrap Container if needed */
-.custom-container {
-    padding-right: 0 !important;
-    padding-left: 0 !important;
-    width: 100%; /* Ensure container is full width */
-    max-width: 100% !important; /* Prevent Bootstrap from limiting the container width */
-    align-items: start; /* Aligns items to the top, if necessary */
+.content {
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: flex-start; /* Ensures content starts from the left */
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
 
-#root > div {
-    justify-content: flex-start !important; /* Aligns content to the start, overriding center alignment */
+.summaryColumns {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    grid-template-rows: 1fr;
+    height: 100%;
+    width: 100%;
+}
+
+/* Project (left) column styles */
+.projectList {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-right: 1px solid black;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.projectRow {
+    font-size: 0.9vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    cursor: pointer;
+    border-bottom: 1px solid black;
+    width: 100%;
+    min-height: 10vh;
+    height: 10vh;
+    padding: 1vw 0 0 1vw;
+    transition: font-size 0.2s;
+}
+
+.createNewProject {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}
+
+.projectName {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+    width: 100%;
+    height: 100%;
+}
+
+.projectId {
+    font-size: 0.7vw;
+    color: gray;
+}
+
+.projectAuthor {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    width: 100%;
+    height: 100%;
+}
+
+.projectTimestamp {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    width: 100%;
+    height: 100%;
+}
+
+.projectRow:hover {
+    font-size: 1vw;
+    background-color: rgb(246, 246, 246);
+}
+
+/* Content (right) column styles */
+.projectContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    padding: 1.6vw;
+    row-gap: 1.6vw;
+}
+
+.codeSnippet {
+    height: 70%;
+    max-height: 70%;
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 0.75vw;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 1vw;
+    overflow-y: auto;
+    font-size: 0.9vw;
+}
+
+.projectDetails {
+    height: 30%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 0.75vw;
+    display: grid;
+    grid-template-rows: 1fr 3fr 1fr;
+    grid-template-columns: 1fr;
+    padding: 1vw;
+}
+
+.topRow {
+    grid-row: 1 / 2;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid black;
+}
+
+.middleRow {
+    grid-row: 2 / 3;
+    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+}
+.bottomRow {
+    grid-row: 3 / 4;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
 }
