@@ -23,16 +23,30 @@ function NewProjectScreen({ closeNewProjectScreen }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(form);
-        console.log(code);
-        if(!code) {
+        if (!code) {
             alert('Please upload a code snippet.');
         }
+        submitRequest()
     };
 
     const handleClose = (event) => {
         if (!event || event.target === event.currentTarget) {
             closeNewProjectScreen();
+        }
+    };
+
+    const submitRequest = async () => {
+        try {
+            let username = 'dgerard'
+            const response = await fetch(`http://localhost:4000/submit_request?username=${encodeURIComponent(username)}&prompt=${encodeURIComponent(code)}&title=${encodeURIComponent(form.title)}&description=${encodeURIComponent(form.description)}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Failed to submit request:', error);
+            return null;
         }
     };
 
@@ -49,17 +63,6 @@ function NewProjectScreen({ closeNewProjectScreen }) {
                             name="title"
                             placeholder="Enter project title"
                             value={form.title}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className={st.fieldContainer}>
-                        <label htmlFor="author">Author:</label>
-                        <input
-                            type="text"
-                            id="author"
-                            name="author"
-                            placeholder="Project author"
-                            value={form.author}
                             onChange={handleInputChange}
                         />
                     </div>

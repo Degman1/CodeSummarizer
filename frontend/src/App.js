@@ -46,7 +46,7 @@ function App() {
 
   const NavigationBar = () => {
     return (
-      <Navbar bg="dark" variant="dark" expand="lg" className="navbar-custom">
+      <Navbar bg="dark" variant="dark" expand="lg" className="navbar-custom" style={{paddingLeft: '1.4vw'}}>
         <Navbar.Brand href="#home">Code Summarizer</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
