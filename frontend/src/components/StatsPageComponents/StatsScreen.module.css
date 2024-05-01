@@ -16,7 +16,6 @@
 .dataBlock {
     border-bottom: 1px solid black;
     grid-template-rows: 1fr 1fr;
-    height: 50%;
     text-align: center;
     height: 40%;
     display: flex;
