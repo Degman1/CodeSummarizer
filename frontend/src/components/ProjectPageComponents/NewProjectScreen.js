@@ -38,7 +38,18 @@ function NewProjectScreen({ closeNewProjectScreen }) {
     const submitRequest = async () => {
         try {
             let username = 'dgerard'
-            const response = await fetch(`http://localhost:4000/submit_request?username=${encodeURIComponent(username)}&prompt=${encodeURIComponent(code)}&title=${encodeURIComponent(form.title)}&description=${encodeURIComponent(form.description)}`);
+            const formData = new FormData();
+            formData.append("username", username);
+            formData.append("prompt", code); // 'code' is a File object
+            formData.append("title", form.title);
+            formData.append("description", form.description);
+            formData.append("programming_language", "")
+
+            const response = await fetch(`http://localhost:4000/submit_request`, {
+                method: 'POST',
+                body: formData
+            });
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

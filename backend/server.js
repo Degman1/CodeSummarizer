@@ -185,6 +185,10 @@ app.get('/get_responses', async (req, res) => {
   }
 });
 
+
+import multer from 'multer';
+const upload = multer({ storage: multer.memoryStorage() }); // Use memory storage to handle the file as a buffer
+
 /**
  * Submit a request for a new summary
  * @param username: String
@@ -199,23 +203,32 @@ app.get('/get_responses', async (req, res) => {
  *   catagory: String
  * }]
  */
-app.get('/submit_request', async (req, res) => {
-  // Log the request
+app.post('/submit_request', upload.single('prompt'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+
+  // Convert buffer to string
+  const fileContents = req.file.buffer.toString('utf8');
+  const { username, programming_language, title, description } = req.body;
+  console.log(fileContents)
+  console.log(username, programming_language, title, description)
+
   const { data, error } = await supabase
     .from('Requests')
     .insert({
-      prompt: req.query.prompt,
-      username: req.query.username,
-      programming_language: req.query.programming_language,
-      title: req.query.title,
-      description: req.query.description,
-    })
-    .select();
+      prompt: fileContents, // Store the file contents as a string
+      username,
+      programming_language,
+      title,
+      description,
+    });
 
   if (error) {
-    res.send(error);
-    return;
+    // error handle
   }
+  console.log(data)
+  // I didn't touch anything below this -Jake
 
   const request_data = () => data[0];
 
@@ -248,6 +261,8 @@ app.get('/submit_request', async (req, res) => {
     res.send("Failed to log request");
   }
 });
+
+
 
 /**
  * Submit a rating for a summary response
