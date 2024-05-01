@@ -33,7 +33,7 @@ function App() {
 
     try {
       await logout();
-      navigate('/login'); // Use navigate to redirect
+      navigate('/login'); 
     } catch {
       setError('Failed to log out');
     }
