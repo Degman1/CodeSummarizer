@@ -13,17 +13,28 @@ function StatScreen() {
     style6: 2,
   });
 
+  const pieChartData = [
+    ["Language", "Count"],
+    ["Java", 2],
+    ["Python", 5],
+    ["Javascript", 3]
+  ];
+
+  const barChartData = [
+    ["Style", "Score", {role: "style"}],
+    ["style1", 3, "green"],
+    ["style2", 3, "white"],
+    ["style3", 1, "blue"],
+    ["style4", 7, "red"],
+    ["style5", 0, "yellow"],
+    ["style6", 2, "orange"]
+  ];
+
   const [languageData, setLanguageData] = useState({
     Java: 2,
     Python: 5,
     Javascript: 3,
   });
-
-  // const [languageData, setLanguageData] = useState({
-  //   ['Java', 2]
-  //   Python: 5,
-  //   Javascript: 3,
-  // });
 
   const [userInfo, setUserInfo] = useState({
     Name: 'Jacob Sweet',
@@ -38,6 +49,10 @@ function StatScreen() {
   const pieChartOptions = {
     piehole: 0.4,
     is3d: false
+  }
+
+  const barChartOptions = {
+  
   }
 
 
@@ -59,7 +74,7 @@ function StatScreen() {
     );
   }
   function BuildRankings(data) {
-    const sortedArray = Object.entries(data).sort((a, b) => a[1] - b[1]);
+    const sortedArray = Object.entries(data).sort((a, b) => b[1] - a[1]);
     const sortedDictionary = Object.fromEntries(sortedArray);
     return (
       <div>
@@ -79,6 +94,8 @@ function StatScreen() {
       return (<div>
         <Chart
           chartType="PieChart"
+          height="100%"
+          width="100%"
           data={data}
           options={options}
         />
@@ -87,7 +104,7 @@ function StatScreen() {
     else if (graph_type == 'bar') {
       return (<div>
         <Chart
-          chartType="BarChart"
+          chartType="ColumnChart"
           data={data}
           options={options}
         />
@@ -117,7 +134,7 @@ function StatScreen() {
             {BuildRankings(languageData)}
           </div>
           <div className={st.graphArea}>
-            {BuildGraph(languageData, pieChartOptions, 'pie')}
+            {BuildGraph(pieChartData, pieChartOptions, 'pie')}
           </div>
         </div>
         <h1 className={st.header}>Style Preferences</h1>
@@ -125,7 +142,9 @@ function StatScreen() {
           <div className={st.detailsArea}>
             {BuildRankings(styleData)}
           </div>
-          <div className={st.graphArea}>GRAPH AREA</div>
+          <div className={st.graphArea}>
+            {BuildGraph(barChartData, barChartOptions, 'bar')}
+          </div>
         </div>
       </div>
 
