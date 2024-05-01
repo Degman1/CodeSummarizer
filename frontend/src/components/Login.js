@@ -18,7 +18,7 @@ export default function Login() {
             setError('')
             setLoading(true)
             await login(emailRef.current.value, passwordRef.current.value)
-            navigate("/");  // Changed from history.push("/") to navigate("/")
+            navigate("/");  
         } catch (error) {
             console.error("Failed to log in:", error);
             setError('Failed to log in: ' + error.message);
