@@ -232,9 +232,10 @@ app.post('/submit_request', upload.single('prompt'), async (req, res) => {
 
   const request_data = () => data[0];
 
-  if (data.length > 0 && data[0].request_id != undefined) {
+  if (fileContents.length > 0) { // && fileContents[0].request_id != undefined) {
     // Get the list of responses and their respective catagories
-    let responses = Summarizer.getSummaries(req.query.prompt, req.query.programming_language);
+    // TODO: Make the programming language part work
+    const responses = await Summarizer.getSummaries(fileContents, "[language not provided]");
 
     // Add the request id to each response object
     responses.forEach(response => {
