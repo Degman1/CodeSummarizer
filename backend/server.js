@@ -22,6 +22,7 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 app.use(cors({
   origin: 'http://localhost:3000'
 }));
+app.use(express.json());
 
 /**
  * Tests the status of the backend server
@@ -255,19 +256,20 @@ app.get('/submit_request', async (req, res) => {
  * @return Success or error message
  */
 app.post('/rate_response', async (req, res) => {
-
-  // TODO send the ratings to ChatGPT?
+  const { response_id, rating } = req.body;
 
   const { error } = await supabase
     .from('Responses')
-    .update({ 'rating': req.query.rating })
-    .eq("response_id", req.query.response_id);
+    .update({ 'rating': rating })
+    .eq("response_id", response_id);
+
   if (error) {
-    res.send(error);
+    res.status(500).json({ error: error.message });
   } else {
-    res.send("Rating Succeded");
+    res.json({ message: "Rating Succeeded" });
   }
 });
+
 
 /**
  * Get the summary, catagory, and rating statistics for a given user
