@@ -43,7 +43,7 @@ function App() {
 
   const NavigationBar = () => {
     return (
-      <Navbar bg="dark" variant="dark" expand="lg" className="mb-4 navbar-custom">
+      <Navbar bg="dark" variant="dark" expand="lg" className="navbar-custom">
         <Navbar.Brand href="#home">Code Summarizer</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -75,7 +75,7 @@ function App() {
       <Router >
         <AuthProvider>
           <NavigationBar />
-          <Container className="d-flex align-items-center justify-content-center" style={{ height: "100%", flex: '1' }}>
+          <div className="d-flex align-items-center justify-content-center" style={{ height: "100%", flex: '1', marginRight: '0', marginLeft: '0' }}>
             <div style={{ height: '100%', width: '100%', flex: '1' }}>
               <Routes>
                 <Route path="/signup" element={<Signup />} />
@@ -85,7 +85,7 @@ function App() {
                 <Route path="/stats" element={buildSubPage()} />
               </Routes>
             </div>
-          </Container>
+          </div>
           <Footer />
         </AuthProvider>
       </Router>

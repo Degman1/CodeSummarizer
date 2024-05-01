@@ -1,8 +1,9 @@
-.project-list-column {
+.projectListColumn {
     width: 25%; /* Adjust width as necessary */
-    min-height: 100vh; /* Full height */
     padding: 0 !important; /* Remove padding */
     margin: 0 !important; /* Remove margins */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
     background-color: #f8f9fa; /* Background color */
     border-right: 2px solid #dee2e6; /* Right border for a clear separation */
 }

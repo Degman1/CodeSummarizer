@@ -63,10 +63,10 @@ function ProjectList() {
     }
 
     return (
-        <Container style={{ border: '2px solid black', borderRadius: '0.5vw', flex: '1', height: '100%', width: '100%', margin: '0' }} fluid>
+        <Container style={{ flex: '1', height: '100%', width: '100%', margin: '0', paddingRight: '0', paddingLeft: '0' }} fluid>
             {newProjectScreen && <NewProjectScreen closeNewProjectScreen={() => setNewProjectScreen(false)} />}
-            <Row style={{ minHeight: '100%', margin: '0', width: '100%', height: '100%', flex: '1' }}>
-                <Col md={4} className="project-list-column">
+            <Row style={{ minHeight: '100%', margin: '0', width: '100%', height: '100%', flex: '1'}}>
+                <Col md={4} className={st.projectListColumn}>
                     <ListGroup>
                         {projects.map(project => (
                             <ListGroup.Item
@@ -79,12 +79,12 @@ function ProjectList() {
                                 <div><small>{new Date(project.creation_date).toLocaleDateString()}</small></div>
                             </ListGroup.Item>
                         ))}
-                        <Button variant="primary" onClick={() => {
+                        <Button style={{marginTop: '1.5vh', width: '50%', marginLeft: '25%'}} variant="primary" onClick={() => {
                             setNewProjectScreen(true);
                         }}>Create new project</Button>
                     </ListGroup>
                 </Col>
-                <Col md={8}>
+                <Col style={{ paddingTop: '12px' }}>
                     {selectedProject ? (
                         <Card>
                             <Card.Header>{selectedProject.title || `Untitled Project ${selectedProject.request_id}`}</Card.Header>
