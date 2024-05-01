@@ -7,14 +7,16 @@ import StatScreen from './components/StatsPageComponents/StatsScreen';
 import AccountDropdown from './components/AccountDropdownComponents/AccountDropdown';
 import HomePage from './components/HomePageComponents/HomePage';
 import Signup from './components/Signup';
-import { AuthProvider } from './components/contexts/AuthContext';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { AuthProvider, useAuth } from './components/contexts/AuthContext';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Login from './components/Login';
 
 function App() {
+  const [error, setError] = useState("")
   const [subPage, setSubpage] = useState('login');
   const [openAccountTab, setOpenAccountTab] = useState(false);
-
+  const { currentUser, logout } = useAuth() || {};
+  const navigate = useNavigate();
   const buildNavButton = (page) => {
     return (
       <Button variant="primary" onClick={() => {
@@ -25,6 +27,17 @@ function App() {
       </Button>
     );
   };
+
+  async function handleLogout() {
+    setError('');
+
+    try {
+      await logout();
+      navigate('/login'); // Use navigate to redirect
+    } catch {
+      setError('Failed to log out');
+    }
+  }
 
   const buildSubPage = () => {
     switch (subPage) {
@@ -56,7 +69,7 @@ function App() {
           <NavDropdown title={<i className="bi bi-person-circle" style={{ fontSize: '1.5rem', cursor: 'pointer' }} />} id="nav-dropdown">
             <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="#action/3.3">Logout</NavDropdown.Item>
+            <NavDropdown.Item href="#action/3.3" onClick={handleLogout}>Logout</NavDropdown.Item>
           </NavDropdown>
         </Nav>
       </Navbar.Collapse>
