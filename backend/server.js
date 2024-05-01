@@ -4,18 +4,24 @@
 
 import supabaseClient from '@supabase/supabase-js';
 import express, { request } from "express";
+import cors from 'cors';
+
 import * as Summarizer from './summarizer.js';
 
 const app = express();
 
 const supabase = supabaseClient.createClient(
-  "https://klymzdwfxffmowgxmeij.supabase.co", 
+  "https://klymzdwfxffmowgxmeij.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtseW16ZHdmeGZmbW93Z3htZWlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTE4NTU2MTYsImV4cCI6MjAyNzQzMTYxNn0.BrofIOnCRFFfrINR3nqNq15I62_meXXAODilxlXSsA0"
 );
 
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
 /**
  * Tests the status of the backend server
@@ -35,15 +41,15 @@ app.get("/status", (request, response) => {
  * @return Success or error message
  */
 app.post('/add_user', async (req, res) => {
-  const {error} = await supabase
-      .from('Users')
-      .insert({
-        username: req.query.username,
-        password: req.query.password,
-        admin: req.query.admin
-      });
+  const { error } = await supabase
+    .from('Users')
+    .insert({
+      username: req.query.username,
+      password: req.query.password,
+      admin: req.query.admin
+    });
   if (error) {
-      res.send(error);
+    res.send(error);
   } else {
     res.send("User Successfully Created");
   }
@@ -55,12 +61,12 @@ app.post('/add_user', async (req, res) => {
  * @return Success or error message
  */
 app.delete('/remove_user', async (req, res) => {
-  const {error} = await supabase
-      .from('Users')
-      .delete()
-      .eq('username', req.query.username);
+  const { error } = await supabase
+    .from('Users')
+    .delete()
+    .eq('username', req.query.username);
   if (error) {
-      res.send(error);
+    res.send(error);
   } else {
     res.send("User Successfully Deleted");
   }
@@ -73,18 +79,18 @@ app.delete('/remove_user', async (req, res) => {
  * @returns JSON { username: String, success: Boolean, message: String }
  */
 app.get('/authenticate_user', async (req, res) => {
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('Users')
     .select('username, password')
     .eq('username', req.query.username);
   if (error) {
     res.send(error);
   } else if (data == undefined || data.length == 0) {
-    res.send({username: "", success: false, message: `Username ${req.query.username} does not exist.`});
+    res.send({ username: "", success: false, message: `Username ${req.query.username} does not exist.` });
   } else if (req.query.password == data[0].password) {
-    res.send({username: data[0].username, success: true, message: "User authentication successfull."});
+    res.send({ username: data[0].username, success: true, message: "User authentication successfull." });
   } else {
-    res.send({username: data[0].username, success: false, message: "Incorrect password, please try again."});
+    res.send({ username: data[0].username, success: false, message: "Incorrect password, please try again." });
   }
 });
 
@@ -98,7 +104,7 @@ app.get('/authenticate_user', async (req, res) => {
  * }
  */
 app.get('/user_information', async (req, res) => {
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('Users')
     .select('username, creation_date, admin')
     .eq('username', req.query.username);
@@ -119,7 +125,7 @@ app.get('/user_information', async (req, res) => {
  * }]
  */
 app.get('/all_user_information', async (req, res) => {
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('Users')
     .select('username, creation_date, admin');
   if (error) {
@@ -143,7 +149,7 @@ app.get('/all_user_information', async (req, res) => {
  * }]
  */
 app.get('/get_user_requests', async (req, res) => {
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('Requests')
     .select('request_id, creation_date, prompt, username, programming_language, title, description')
     .eq("username", req.query.username);
@@ -167,7 +173,7 @@ app.get('/get_user_requests', async (req, res) => {
  * }]
  */
 app.get('/get_responses', async (req, res) => {
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('Responses')
     .select('response_id, request_id, text, catagory, rating, creation_date')
     .eq("request_id", req.query.request_id);
@@ -194,7 +200,7 @@ app.get('/get_responses', async (req, res) => {
  */
 app.get('/submit_request', async (req, res) => {
   // Log the request
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('Requests')
     .insert({
       prompt: req.query.prompt,
@@ -222,7 +228,7 @@ app.get('/submit_request', async (req, res) => {
     });
 
     // Log the responses
-    const {data, error} = await supabase
+    const { data, error } = await supabase
       .from('Responses')
       .insert(responses)
       .select();
@@ -252,9 +258,9 @@ app.post('/rate_response', async (req, res) => {
 
   // TODO send the ratings to ChatGPT?
 
-  const {error} = await supabase
+  const { error } = await supabase
     .from('Responses')
-    .update({'rating': req.query.rating})
+    .update({ 'rating': req.query.rating })
     .eq("response_id", req.query.response_id);
   if (error) {
     res.send(error);
@@ -289,17 +295,17 @@ app.get('/user_statistics', async (req, res) => {
     .select('catagory, rating');
 
   const language_counter = {};
-  
+
   languages.data.forEach(ele => {
     if (language_counter[ele.programming_language]) {
-        language_counter[ele.programming_language] += 1;
+      language_counter[ele.programming_language] += 1;
     } else {
-        language_counter[ele.programming_language] = 1;
+      language_counter[ele.programming_language] = 1;
     }
   });
 
   const topics_counter = {};
-  
+
   topics.data.forEach(ele => {
     if (topics_counter[ele.catagory]) {
       topics_counter[ele.catagory] += 1;
