@@ -187,9 +187,22 @@ app.get('/get_responses', async (req, res) => {
 
 
 import multer from 'multer';
-import fs from 'fs';
 const upload = multer({ storage: multer.memoryStorage() }); // Use memory storage to handle the file as a buffer
 
+/**
+ * Submit a request for a new summary
+ * @param username: String
+ * @param prompt: String
+ * @param programming_language: String
+ * @param title: String
+ * @param description: String
+ * @return JSON [{
+ *   request_id: Int,
+ *   response_id: Int,
+ *   text: String,
+ *   catagory: String
+ * }]
+ */
 app.post('/submit_request', upload.single('prompt'), async (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
@@ -214,7 +227,7 @@ app.post('/submit_request', upload.single('prompt'), async (req, res) => {
   if (error) {
     // error handle
   }
-
+  console.log(data)
   // I didn't touch anything below this -Jake
 
   const request_data = () => data[0];
@@ -250,70 +263,6 @@ app.post('/submit_request', upload.single('prompt'), async (req, res) => {
 });
 
 
-/**
- * Submit a request for a new summary
- * @param username: String
- * @param prompt: String
- * @param programming_language: String
- * @param title: String
- * @param description: String
- * @return JSON [{
- *   request_id: Int,
- *   response_id: Int,
- *   text: String,
- *   catagory: String
- * }]
- */
-app.get('/submit_request', async (req, res) => {
-  // Log the request
-  console.log(req.query)
-  const { data, error } = await supabase
-    .from('Requests')
-    .insert({
-      prompt: req.query.prompt,
-      username: req.query.username,
-      programming_language: req.query.programming_language,
-      title: req.query.title,
-      description: req.query.description,
-    })
-    .select();
-
-  if (error) {
-    res.send(error);
-    return;
-  }
-
-  const request_data = () => data[0];
-
-  if (data.length > 0 && data[0].request_id != undefined) {
-    // Get the list of responses and their respective catagories
-    let responses = Summarizer.getSummaries(req.query.prompt, req.query.programming_language);
-
-    // Add the request id to each response object
-    responses.forEach(response => {
-      response["request_id"] = request_data().request_id;
-    });
-
-    // Log the responses
-    const { data, error } = await supabase
-      .from('Responses')
-      .insert(responses)
-      .select();
-
-    if (error) {
-      res.send(error);
-      return;
-    }
-
-    // Return the response information
-    res.send({
-      request: request_data(),
-      responses: data
-    });
-  } else {
-    res.send("Failed to log request");
-  }
-});
 
 /**
  * Submit a rating for a summary response
