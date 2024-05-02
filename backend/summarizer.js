@@ -68,20 +68,20 @@ export async function getSummaries(code_snippet, programming_language) {
 
   return [
     {
-      text: await haiku.prompt("Summarize the following code snippet that is written in the programming language " + programming_language + ". \n" + code_snippet),
-      category: "Brief Summary",
+      text: await haiku.prompt("Summarize the following code snippet that is written in the programming language " + programming_language + ". Make the summary just a short overview of what is happening in the code.\n" + code_snippet),
+      category: "Brief Overview",
     },
     {
-      text: await haiku.prompt("Summarize the following code snippet that is written in the programming language " + programming_language + "\n" + code_snippet),
-      category: "Brief Summary",
+      text: await haiku.prompt("Summarize the following code snippet that is written in the programming language " + programming_language + ". Make the summary a long detailed summary of what is happening in each line of the code.\n" + code_snippet),
+      category: "Long Scrutinous",
     },
     {
-      text: await haiku.prompt("Summarize the following code snippet that is written in the programming language " + programming_language + "\n" + code_snippet),
-      category: "Brief Summary",
+      text: await haiku.prompt("Summarize the following code snippet that is written in the programming language " + programming_language + ". Make the summary be highly technical for a computer science expert.\n" + code_snippet),
+      category: "Computer Science Expert",
     },
     {
-      text: await haiku.prompt("Summarize the following code snippet that is written in the programming language " + programming_language + "\n" + code_snippet),
-      category: "Brief Summary",
+      text: await haiku.prompt("Summarize the following code snippet that is written in the programming language " + programming_language + ". Make the summary easy to understand for a dumb person.\n" + code_snippet),
+      category: "Basic Lanugage",
     },
     // {
     //   text: await haiku.prompt("Rate the following " + programming_language + " code snippet on a scale of 1 to 10\n" + code_snippet),
