@@ -168,7 +168,7 @@ app.get('/get_user_requests', async (req, res) => {
  *   response_id: Int,
  *   request_id: Int,
  *   text: String,
- *   catagory: String,
+ *   category: String,
  *   rating: Int,
  *   creation_date: Date String
  * }]
@@ -176,7 +176,7 @@ app.get('/get_user_requests', async (req, res) => {
 app.get('/get_responses', async (req, res) => {
   const { data, error } = await supabase
     .from('Responses')
-    .select('response_id, request_id, text, catagory, rating, creation_date')
+    .select('response_id, request_id, text, category, rating, creation_date')
     .eq("request_id", req.query.request_id);
   if (error) {
     res.send(error);
@@ -200,7 +200,7 @@ const upload = multer({ storage: multer.memoryStorage() }); // Use memory storag
  *   request_id: Int,
  *   response_id: Int,
  *   text: String,
- *   catagory: String
+ *   category: String
  * }]
  */
 app.post('/submit_request', upload.single('prompt'), async (req, res) => {
@@ -288,7 +288,7 @@ app.post('/rate_response', async (req, res) => {
 
 
 /**
- * Get the summary, catagory, and rating statistics for a given user
+ * Get the summary, category, and rating statistics for a given user
  * @param username: String
  * @return JSON {
  *   programming_language_counts: {
@@ -310,37 +310,43 @@ app.get('/user_statistics', async (req, res) => {
 
   const topics = await supabase
     .from('Responses')
-    .select('catagory, rating');
+    .select('category, rating');
 
   const language_counter = {};
 
-  languages.data.forEach(ele => {
-    if (language_counter[ele.programming_language]) {
-      language_counter[ele.programming_language] += 1;
-    } else {
-      language_counter[ele.programming_language] = 1;
-    }
-  });
+  if (languages.data != null) {
+    languages.data.forEach(ele => {
+      if (language_counter[ele.programming_language]) {
+        language_counter[ele.programming_language] += 1;
+      } else {
+        language_counter[ele.programming_language] = 1;
+      }
+    });
+  }
 
   const topics_counter = {};
 
-  topics.data.forEach(ele => {
-    if (topics_counter[ele.catagory]) {
-      topics_counter[ele.catagory] += 1;
-    } else {
-      topics_counter[ele.catagory] = 1;
-    }
-  });
+  if (topics.data != null) {
+    topics.data.forEach(ele => {
+      if (topics_counter[ele.category]) {
+        topics_counter[ele.category] += 1;
+      } else {
+        topics_counter[ele.category] = 1;
+      }
+    });
+  }
 
   const topics_average_score = {};
 
-  topics.data.forEach(ele => {
-    if (topics_average_score[ele.catagory]) {
-      topics_average_score[ele.catagory] += ele.rating;
-    } else {
-      topics_average_score[ele.catagory] = ele.rating;
-    }
-  });
+  if (topics.data != null) {
+    topics.data.forEach(ele => {
+      if (topics_average_score[ele.category]) {
+        topics_average_score[ele.category] += ele.rating;
+      } else {
+        topics_average_score[ele.category] = ele.rating;
+      }
+    });
+  }
 
   for (const [key, value] of Object.entries(topics_average_score)) {
     topics_average_score[key] = value / topics_counter[key];
@@ -360,7 +366,7 @@ app.get('/user_statistics', async (req, res) => {
 });
 
 /**
- * Get the summary, catagory, and rating statistics for all users combined
+ * Get the summary, category, and rating statistics for all users combined
  * @return JSON TBD
  */
 app.get('/combined_statistics', async (req, res) => {
