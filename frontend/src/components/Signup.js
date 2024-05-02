@@ -24,6 +24,30 @@ export default function Signup() {
             setError('')
             setLoading(true)
             await signup(emailRef.current.value, passwordRef.current.value)
+
+            try {
+              const data = {
+                admin: false,
+                username: emailRef.current.value, 
+                password: passwordRef.current.value
+              };
+              const response = await fetch('http://localhost:4000/add_user', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data)
+              });
+  
+              if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+  
+              console.log("user added")
+          } catch (error) {
+              console.error('Failed to add user:', error);
+          }
+
         } catch (error) {
             console.error("Failed to create an account:", error);
             setError('Failed to create an account: ' + error.message);
