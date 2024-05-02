@@ -34,7 +34,7 @@ function App() {
       case 'login':
         return <Login setSubpage={setSubpage}/>;
       case 'signup':
-        return <Signup/>;
+        return <Signup setSubpage={setSubpage}/>;
       case 'Home':
         return <HomePage />;
       case 'Projects':

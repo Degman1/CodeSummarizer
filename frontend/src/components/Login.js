@@ -49,7 +49,7 @@ export default function Login({setSubpage}) {
                 </Card.Body>
             </Card>
             <div className="w-100 text-center mt-2">
-                Need an account? <Link to="/signup">Sign Up</Link>
+                Need an account? <Button onClick={() => setSubpage('signup')} to="/signup">Sign Up</Button>
             </div>
         </>
     );
