@@ -3,14 +3,13 @@ import { Form, Button, Card, Alert } from "react-bootstrap"
 import { useAuth } from './contexts/AuthContext';
 import { Link, useNavigate } from "react-router-dom"
 
-export default function Login() {
+export default function Login({setSubpage}) {
     const emailRef = useRef()
     const passwordRef = useRef()
     const { login, currentUser } = useAuth()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
-
+    // const navigate = useNavigate()
     async function handleSubmit(e){
         e.preventDefault()
 
@@ -18,7 +17,8 @@ export default function Login() {
             setError('')
             setLoading(true)
             await login(emailRef.current.value, passwordRef.current.value)
-            navigate("/");  
+            console.log("logged in");
+            setSubpage("Home");  
         } catch (error) {
             console.error("Failed to log in:", error);
             setError('Failed to log in: ' + error.message);
@@ -54,3 +54,5 @@ export default function Login() {
         </>
     );
 }
+
+

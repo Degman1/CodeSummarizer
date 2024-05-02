@@ -32,7 +32,9 @@ function App() {
   const buildSubPage = () => {
     switch (subPage) {
       case 'login':
-        return <Login />;
+        return <Login setSubpage={setSubpage}/>;
+      case 'signup':
+        return <Signup/>;
       case 'Home':
         return <HomePage />;
       case 'Projects':
@@ -72,7 +74,7 @@ function App() {
       © 2024 Code Summarizer
     </div>
   );
-
+  console.log(subPage)
   return (
     <div className="d-flex flex-column" style={{ height: '100vh', width: '100vw' }}>
       <Router >
@@ -80,13 +82,14 @@ function App() {
           <NavigationBar />
           <div className="d-flex align-items-center justify-content-center" style={{ height: "100%", flex: '1', marginRight: '0', marginLeft: '0' }}>
             <div style={{ height: '100%', width: '100%', flex: '1' }}>
-              <Routes>
+              {buildSubPage()}
+              {/* <Routes>
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/login" element={<Login setSubpage={setSubpage} />} />
                 <Route path="/" element={buildSubPage()} />
                 <Route path="/projects" element={buildSubPage()} />
                 <Route path="/stats" element={buildSubPage()} />
-              </Routes>
+              </Routes> */}
             </div>
           </div>
           <Footer />
