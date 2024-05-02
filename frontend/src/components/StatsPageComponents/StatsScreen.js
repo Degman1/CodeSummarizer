@@ -133,7 +133,7 @@ function StatScreen() {
   }
 
   const barChartOptions = {
-    
+    legend: { position: "none" }
   }
 
   function BuildDataBlock(header, graph = null) {
