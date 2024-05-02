@@ -5,8 +5,51 @@ import { Chart } from "react-google-charts";
 
 function StatScreen() {
 
+  const [languageData, setLanguageData] = useState({
+    Java: 2,
+    Python: 5,
+    Javascript: 3,
+  });
+  
+  const [styleData, setStyleData] = useState({
+    style1: 3,
+    style2: 3,
+    style3: 1,
+    style4: 7,
+    style5: 0,
+    style6: 2,
+  });
+
+  const [userInfo, setUserInfo] = useState({
+    Name: 'Jacob Sweet',
+    Email: 'jacobsweet@umass.edu',
+  });
+
+  const [userData, setUserData] = useState({
+    'Account Created': '5/1/2024',
+    'Summary Count' : 10
+  });
+
+  const [pieChartData, setPieChartData] = useState([
+    ["Language", "Count"],
+    ["Java", 2],
+    ["Python", 5],
+    ["Javascript", 3]
+  ]);
+
+  const [barChartData, setBarChartData] = useState([
+    ["Style", "Score", {role: "style"}],
+    ["style1", 3, "green"],
+    ["style2", 3, "gold"],
+    ["style3", 1, "blue"],
+    ["style4", 7, "red"],
+    ["style5", 0, "yellow"],
+    ["style6", 2, "orange"]
+  ]);
+
   const fetchUserInformation = async (username) => {
     try {
+        // console.log(username)
         const response = await fetch(`http://localhost:4000/user_information?username=${encodeURIComponent(username)}`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -19,9 +62,6 @@ function StatScreen() {
     }
   };
 
-  fetchUserInformation('dgerard').then((data) => {
-      console.log(data);
-  });
 
   const fetchStatistics = async (username) => {
     try {
@@ -37,51 +77,55 @@ function StatScreen() {
     }
   };
 
-  fetchStatistics('dgerard').then((data) => {
+  useEffect( () => {
+    fetchUserInformation('dgerard').then((data) => {
+      data = {Username: data[0].username, Admin: `${data[0].admin}`}
+      setUserInfo(data)
+    });
+
+    fetchUserInformation('dgerard').then((data) => {
       console.log(data)
-  });
+      setUserData((old) => {
+        let newData = {...old};
+        newData['Account Created'] = data[0].creation_date
+        return newData
+      })
+    });
 
-  const pieChartData = [
-    ["Language", "Count"],
-    ["Java", 2],
-    ["Python", 5],
-    ["Javascript", 3]
-  ];
+    fetchStatistics('dgerard').then((data) => {
+      console.log(data)
+      let sum = 0;
+      let counts = data.programming_language_counts
+      Object.keys(counts).forEach((key) => { sum += counts[key]})
+      setUserData((old) => {
+        let newData = {...old};
+        newData['Summary Count'] = sum
+        return newData
+      })
+      setStyleData(data.topic_average_scores)
+      let barChartData = [
+        ["Style", "Score", {role: "style"}]
+      ];
+      Object.keys(data.topic_average_scores).forEach(key => {
+        let element = [key, data.topic_average_scores[key], '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0')]
+        barChartData.push(element)
+      });
+      setBarChartData(barChartData)
+    }); 
 
-  const barChartData = [
-    ["Style", "Score", {role: "style"}],
-    ["style1", 3, "green"],
-    ["style2", 3, "gold"],
-    ["style3", 1, "blue"],
-    ["style4", 7, "red"],
-    ["style5", 0, "yellow"],
-    ["style6", 2, "orange"]
-  ];
-
-  const [styleData, setStyleData] = useState({
-    style1: 3,
-    style2: 3,
-    style3: 1,
-    style4: 7,
-    style5: 0,
-    style6: 2,
-  });
-
-  const [languageData, setLanguageData] = useState({
-    Java: 2,
-    Python: 5,
-    Javascript: 3,
-  });
-
-  const [userInfo, setUserInfo] = useState({
-    Name: 'Jacob Sweet',
-    Email: 'jacobsweet@umass.edu',
-  });
-
-  const [userData, setUserData] = useState({
-    'Account Created': '5/1/2024',
-    'Summary Count' : 10
-  });
+    fetchStatistics('dgerard').then((data) => {
+      setLanguageData(data.programming_language_counts)
+      let pieChartData = [
+        ["Language", "Count"]
+      ];
+      Object.keys(data.programming_language_counts).forEach(key => {
+        let element = [key, data.programming_language_counts[key]]
+        pieChartData.push(element)
+      });
+      setPieChartData(pieChartData)
+    });
+    
+  }, [])
 
   const pieChartOptions = {
     piehole: 0.4,
@@ -91,7 +135,6 @@ function StatScreen() {
   const barChartOptions = {
     
   }
-
 
   function BuildDataBlock(header, graph = null) {
     return (
