@@ -37,7 +37,6 @@ app.get("/status", (request, response) => {
 /**
  * Add a new user
  * @param username: String
- * @param password: String
  * @param admin: 'TRUE' || 'FALSE'
  * @return Success or error message
  */
@@ -46,7 +45,6 @@ app.post('/add_user', async (req, res) => {
     .from('Users')
     .insert({
       username: req.query.username,
-      password: req.query.password,
       admin: req.query.admin
     });
   if (error) {
@@ -70,28 +68,6 @@ app.delete('/remove_user', async (req, res) => {
     res.send(error);
   } else {
     res.send("User Successfully Deleted");
-  }
-});
-
-/**
- * Authenticate a user to log them into the site
- * @param username String
- * @param password String
- * @returns JSON { username: String, success: Boolean, message: String }
- */
-app.get('/authenticate_user', async (req, res) => {
-  const { data, error } = await supabase
-    .from('Users')
-    .select('username, password')
-    .eq('username', req.query.username);
-  if (error) {
-    res.send(error);
-  } else if (data == undefined || data.length == 0) {
-    res.send({ username: "", success: false, message: `Username ${req.query.username} does not exist.` });
-  } else if (req.query.password == data[0].password) {
-    res.send({ username: data[0].username, success: true, message: "User authentication successfull." });
-  } else {
-    res.send({ username: data[0].username, success: false, message: "Incorrect password, please try again." });
   }
 });
 
