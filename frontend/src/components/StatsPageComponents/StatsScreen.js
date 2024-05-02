@@ -38,7 +38,7 @@ function StatScreen() {
   ]);
 
   const [barChartData, setBarChartData] = useState([
-    ["Style", "Score", {role: "style"}],
+    ["Style", "Score", {role: "scope"}],
     ["style1", 3, "green"],
     ["style2", 3, "gold"],
     ["style3", 1, "blue"],
@@ -187,7 +187,7 @@ function StatScreen() {
           chartType="ColumnChart"
           data={data}
           options={options}
-          width="95%"
+          width="100%"
         />
         </div>);
     }
