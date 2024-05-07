@@ -1,5 +1,5 @@
 // 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar, Nav, NavDropdown, Button, Container } from 'react-bootstrap';
 import ProjectList from './components/ProjectPageComponents/ProjectList';
@@ -16,16 +16,17 @@ function App() {
   const [subPage, setSubpage] = useState('login');
   const [openAccountTab, setOpenAccountTab] = useState(false);
   const { currentUser, logout } = useAuth() || {};
-  // const navigate = useNavigate();
 
   async function handleLogout() {
+    console.log("handleLogout is called");
     setError('');
-
+    console.log(typeof logout);
     try {
       await logout();
-      // navigate('/login');
-    } catch {
+      setSubpage("login")
+    } catch(error) {
       setError('Failed to log out');
+      console.error("Logout Error: ", error);
     }
   }
 
@@ -61,7 +62,7 @@ function App() {
             <NavDropdown title={<i className="bi bi-person-circle" style={{ fontSize: '1.5rem', cursor: 'pointer' }} />} id="nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.3">Logout</NavDropdown.Item>
+              <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
@@ -74,7 +75,13 @@ function App() {
       © 2024 Code Summarizer
     </div>
   );
-  console.log(subPage)
+  
+  useEffect(() =>{
+    if(currentUser && subPage === "login"){
+      setSubpage("Home")
+    }
+  }, [currentUser, subPage]);
+
   return (
     <div className="d-flex flex-column" style={{ height: '100vh', width: '100vw' }}>
       <Router >
@@ -83,13 +90,6 @@ function App() {
           <div className="d-flex align-items-center justify-content-center" style={{ height: "100%", flex: '1', marginRight: '0', marginLeft: '0' }}>
             <div style={{ height: '100%', width: '100%', flex: '1' }}>
               {buildSubPage()}
-              {/* <Routes>
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login setSubpage={setSubpage} />} />
-                <Route path="/" element={buildSubPage()} />
-                <Route path="/projects" element={buildSubPage()} />
-                <Route path="/stats" element={buildSubPage()} />
-              </Routes> */}
             </div>
           </div>
           <Footer />

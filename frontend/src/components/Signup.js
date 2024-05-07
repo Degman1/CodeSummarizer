@@ -10,6 +10,7 @@ export default function Signup({setSubpage}) {
     const passwordConfirmRef = useRef()
     const {signup, currentUser} = useAuth()
     const [error, setError] = useState('')
+    const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false)
 
 
@@ -24,6 +25,7 @@ export default function Signup({setSubpage}) {
             setError('')
             setLoading(true)
             await signup(emailRef.current.value, passwordRef.current.value)
+            
 
             try {
               const data = {
@@ -44,10 +46,13 @@ export default function Signup({setSubpage}) {
               }
   
               console.log("user added")
+              setSuccess(
+                "Your account has been successfully created! Please proceed to log in!"
+              );
           } catch (error) {
               console.error('Failed to add user:', error);
           }
-
+          
         } catch (error) {
             console.error("Failed to create an account:", error);
             setError('Failed to create an account: ' + error.message);
@@ -62,6 +67,7 @@ export default function Signup({setSubpage}) {
         <Card.Body>
           <h2 className="text-center mb-4">Sign Up</h2>
           {error && <Alert variant="danger">{error}</Alert>}
+          {success && <Alert variant="success">{success}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group id="email">
               <Form.Label>Email</Form.Label>

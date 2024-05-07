@@ -9,7 +9,6 @@ export default function Login({setSubpage}) {
     const { login, currentUser } = useAuth()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
-    // const navigate = useNavigate()
     async function handleSubmit(e){
         e.preventDefault()
 
