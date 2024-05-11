@@ -54,7 +54,6 @@ function App() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link className="nav-link-custom" onClick={() => setSubpage('Home')}>Home</Nav.Link>
             <Nav.Link className="nav-link-custom" onClick={() => setSubpage('Projects')}>Projects</Nav.Link>
             <Nav.Link className="nav-link-custom" onClick={() => setSubpage('Stats')}>Stats</Nav.Link>
           </Nav>
@@ -78,7 +77,7 @@ function App() {
   
   useEffect(() =>{
     if(currentUser && subPage === "login"){
-      setSubpage("Home")
+      setSubpage("Projects")
     }
   }, [currentUser, subPage]);
 

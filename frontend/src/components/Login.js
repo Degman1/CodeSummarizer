@@ -17,7 +17,7 @@ export default function Login({setSubpage}) {
             setLoading(true)
             await login(emailRef.current.value, passwordRef.current.value)
             console.log("logged in");
-            setSubpage("Home");  
+            setSubpage("Projects");  
         } catch (error) {
             console.error("Failed to log in:", error);
             setError('Failed to log in: ' + error.message);

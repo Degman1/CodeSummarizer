@@ -43,7 +43,7 @@ function NewProjectScreen({ closeNewProjectScreen }) {
             formData.append("prompt", code); // 'code' is a File object
             formData.append("title", form.title);
             formData.append("description", form.description);
-            formData.append("programming_language", "")
+            formData.append("programming_language", "SQL")
 
             const response = await fetch(`http://localhost:4000/submit_request`, {
                 method: 'POST',
