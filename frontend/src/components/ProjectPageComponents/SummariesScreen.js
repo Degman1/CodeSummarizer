@@ -79,7 +79,6 @@ function SummariesScreen({ backFunc, selectedProject }) {
         return (
             <>
                 <p>Summary #{summaryIndex + 1}</p>
-                <p>This summary was generated in the 'XXXX' and 'YYYYY' styles.</p>
                 <p>This is currently rated: {summaries[summaryIndex].rating || '-'}/5</p>
                 <div className={st.ratingsRow}>
                     <button onClick={() => submitRating(responesId, 1)}>1</button>

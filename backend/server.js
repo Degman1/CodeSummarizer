@@ -10,10 +10,7 @@ import * as Summarizer from './summarizer.js';
 
 const app = express();
 
-const supabase = supabaseClient.createClient(
-  "https://klymzdwfxffmowgxmeij.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtseW16ZHdmeGZmbW93Z3htZWlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTE4NTU2MTYsImV4cCI6MjAyNzQzMTYxNn0.BrofIOnCRFFfrINR3nqNq15I62_meXXAODilxlXSsA0"
-);
+const supabase = supabaseClient.createClient();
 
 const PORT = process.env.PORT || 4000;
 
@@ -186,7 +183,7 @@ app.post('/submit_request', upload.single('prompt'), async (req, res) => {
 
   // Convert buffer to string
   const fileContents = req.file.buffer.toString('utf8');
-  const { username, programming_language, title, description } = req.query;
+  const { username, programming_language, title, description } = req.body;
   // console.log(fileContents)
   // console.log(username, programming_language, title, description)
 
