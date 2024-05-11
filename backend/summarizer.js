@@ -6,7 +6,7 @@
 import { Anthropic } from '@anthropic-ai/sdk';
 
 // Don't export this later
-export const anthropic = new Anthropic({ apiKey: "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"});
+export const anthropic = new Anthropic();
 
 class LLM {
   constructor() {
